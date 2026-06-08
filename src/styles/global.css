@@ -763,6 +763,73 @@ p {
   color: var(--ink-soft);
 }
 
+/* ---------- soft CTA ---------- */
+.cta-block {
+  display: grid;
+  gap: 0.8rem;
+  margin: 2.2rem 0 0;
+}
+
+.cta-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 1rem 1.1rem;
+}
+
+.cta-title {
+  font-family: var(--font-display);
+  font-weight: 750;
+  color: var(--ink);
+}
+
+.cta-desc {
+  margin: 0.2rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  max-width: 52ch;
+}
+
+.cta-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cta-form input {
+  min-height: 2.75rem;
+  min-width: 13rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+.cta-form input:focus {
+  outline: none;
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(23, 98, 75, 0.14);
+}
+
+@media print {
+  header.site,
+  footer.site,
+  .cta-block,
+  .breadcrumb {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}
+
 footer.site {
   margin-top: 3.5rem;
   border-top: 1px solid var(--line);

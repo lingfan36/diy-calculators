@@ -1,0 +1,44 @@
+---
+// Soft CTA for calculator pages — print/save + email capture.
+// Non-intrusive (no popups), localized. Email form is a placeholder until an
+// email service is connected; affiliate/sponsor slot is reserved below.
+import { t, type Lang } from '../i18n/ui';
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<section class="cta-block">
+  <div class="cta-card">
+    <div class="cta-text">
+      <div class="cta-title">{t(lang, 'cta.saveTitle')}</div>
+      <p class="cta-desc">{t(lang, 'cta.saveDesc')}</p>
+    </div>
+    <button type="button" class="button secondary" id="cta-print">{t(lang, 'cta.saveButton')}</button>
+  </div>
+
+  <div class="cta-card">
+    <div class="cta-text">
+      <div class="cta-title">{t(lang, 'cta.subscribeTitle')}</div>
+      <p class="cta-desc">{t(lang, 'cta.subscribeDesc')}</p>
+    </div>
+    {/* TODO: connect to an email service (Buttondown / ConvertKit / Formspree). */}
+    <form class="cta-form" action="#">
+      <input type="email" required placeholder={t(lang, 'cta.subscribePlaceholder')} aria-label="email" />
+      <button type="submit" class="button">{t(lang, 'cta.subscribeButton')}</button>
+    </form>
+  </div>
+
+  {/* affiliate / sponsor slot reserved — activate after the sink-in period */}
+</section>
+
+<script>
+  document.getElementById('cta-print')?.addEventListener('click', () => window.print());
+  document.querySelector('.cta-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Placeholder: wire up to the chosen email service. For now, acknowledge.
+    const form = e.currentTarget as HTMLFormElement;
+    form.innerHTML = '<p class="cta-desc" style="margin:0">✓ Thanks — email capture goes live with the newsletter service.</p>';
+  });
+</script>
