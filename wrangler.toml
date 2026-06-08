@@ -1,0 +1,5 @@
+# Lets you also deploy from the CLI: `npx wrangler pages deploy dist`
+# (the GitHub-connected build in the CF dashboard does NOT need this file,
+#  but it documents the project name + output dir and enables CLI deploys.)
+name = "diy-calculators"
+pages_build_output_dir = "dist"

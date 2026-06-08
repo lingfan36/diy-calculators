@@ -44,6 +44,31 @@ astro.config.mjs             # `site` + sitemap integration
 3. Create `src/components/<Name>Calculator.astro` (copy the mulch one).
 4. Wire it in `pages/calculators/[slug].astro` (the `live` branch).
 
+## Deploy (Cloudflare Pages)
+
+Free, unlimited bandwidth, commercial/ads allowed. Two ways:
+
+**A. GitHub-connected (recommended, auto-deploys on push)**
+1. Push this repo to GitHub.
+2. Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git → pick the repo.
+3. Build settings: framework preset **Astro**, build command `npm run build`, output dir `dist`.
+4. Deploy → you get a free `*.pages.dev` URL.
+
+**B. CLI (manual)**
+```bash
+npm run build
+npx wrangler pages deploy dist   # needs a Cloudflare login
+```
+
+Config in this repo:
+- `.nvmrc` (Node 22) — pins the build Node version so CF doesn't use an old one.
+- `public/_headers` — security headers + long cache for `/_astro/*`.
+- `wrangler.toml` — project name + output dir for CLI deploys.
+
+**Before binding a real domain**, change the placeholder host in **two** places (they drive canonical / hreflang / sitemap):
+- `astro.config.mjs` → `site`
+- `public/robots.txt` → `Sitemap:` line
+
 ## Status (scaffold)
 - ✅ 50 SEO pages generate (5 category hubs + index + sitemap).
 - ✅ **Mulch calculator** is the fully working sample (calc + UI + schema).
