@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CALCULATORS, CATEGORIES } from '../../data/calculators';
+import { locales, t, navLabel, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const mvp = CALCULATORS.filter((c) => c.priority === 'mvp');
+const title = t(lang, 'site.title');
+const description = t(lang, 'index.lead');
+---
+
+<BaseLayout title={title} description={description} lang={lang} path="/">
+  <h1>{title}</h1>
+  <p class="lead">{description}</p>
+
+  <h2>{t(lang, 'index.popular')}</h2>
+  <div class="grid">
+    {mvp.map((c) => (
+      <a class="card" href={`/${lang}/calculators/${c.slug}/`}>
+        <span class="cat">{navLabel(lang, c.category)}</span>
+        <div class="name">{c.title}{c.live ? <span class="badge">live</span> : null}</div>
+      </a>
+    ))}
+  </div>
+
+  <h2>{t(lang, 'index.browse')}</h2>
+  <div class="grid">
+    {CATEGORIES.map((c) => (
+      <a class="card" href={`/${lang}/categories/${c.slug}/`}>
+        <div class="name">{navLabel(lang, c.slug)}</div>
+        <span class="cat">{c.blurb}</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

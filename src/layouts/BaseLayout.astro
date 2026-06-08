@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import { CATEGORIES } from '../data/calculators';
+import { locales, languages, t, navLabel, type Lang } from '../i18n/ui';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  /** locale-relative path, starts with '/', e.g. '/calculators/mulch-calculator/' or '/' */
+  path: string;
+  jsonLd?: object[];
+}
+
+const { title, description, lang, path, jsonLd = [] } = Astro.props;
+const rel = path === '/' ? '/' : path;
+const canonical = new URL(`/${lang}${rel}`, Astro.site).href;
+const alternates = locales.map((l) => ({
+  lang: l,
+  href: new URL(`/${l}${rel}`, Astro.site).href,
+}));
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    {jsonLd.map((obj) => (
+      <script type="application/ld+json" set:html={JSON.stringify(obj)} />
+    ))}
+  </head>
+  <body>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href={`/${lang}/`}>{t(lang, 'site.title')}</a>
+        <nav>
+          {CATEGORIES.map((c) => (
+            <a href={`/${lang}/categories/${c.slug}/`}>{navLabel(lang, c.slug)}</a>
+          ))}
+        </nav>
+        <span class="langs">
+          {locales.map((l) =>
+            l === lang ? (
+              <strong>{languages[l]}</strong>
+            ) : (
+              <a href={alternates.find((a) => a.lang === l)!.href}>{languages[l]}</a>
+            )
+          )}
+        </span>
+      </div>
+    </header>
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="site">
+      <div class="container">
+        <p class="muted">© {t(lang, 'site.title')} · {t(lang, 'site.footer')}</p>
+      </div>
+    </footer>
+  </body>
+</html>

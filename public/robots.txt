@@ -1,0 +1,16 @@
+# Allow all standard crawlers
+User-agent: *
+Allow: /
+
+# AI search bots explicitly welcomed (AI visibility strategy)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# TODO: update host to the real domain (must match astro.config `site`)
+Sitemap: https://www.example-diycalc.com/sitemap-index.xml

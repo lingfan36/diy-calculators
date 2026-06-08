@@ -1,0 +1,18 @@
+---
+// Root redirect to the default locale. `noindex` so only /en/ is indexed.
+const target = '/en/';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex" />
+    <title>DIY Material Calculators</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href={target}>DIY Material Calculators</a>…</p>
+  </body>
+</html>

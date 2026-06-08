@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Faq from '../../../components/Faq.astro';
+import MulchCalculator from '../../../components/MulchCalculator.astro';
+import {
+  CALCULATORS,
+  getCalculator,
+  byCategory,
+  categoryInfo,
+  defaultMetaDescription,
+} from '../../../data/calculators';
+import { locales, t, navLabel, type Lang } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return locales.flatMap((lang) =>
+    CALCULATORS.map((c) => ({ params: { lang, slug: c.slug } }))
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const slug = Astro.params.slug!;
+const calc = getCalculator(slug)!;
+const cat = categoryInfo(calc.category);
+const related = byCategory(calc.category).filter((c) => c.slug !== calc.slug).slice(0, 6);
+const description = calc.metaDescription ?? defaultMetaDescription(calc);
+const noun = calc.title.replace(' Calculator', '');
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: calc.title,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Any',
+  inLanguage: lang,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t(lang, 'common.home'), item: new URL(`/${lang}/`, Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: navLabel(lang, calc.category), item: new URL(`/${lang}/categories/${calc.category}/`, Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: calc.title },
+  ],
+};
+
+const faqItems = [
+  { q: t(lang, 'faq.q1'), a: t(lang, 'faq.a1') },
+  { q: t(lang, 'faq.q2'), a: t(lang, 'faq.a2') },
+];
+---
+
+<BaseLayout
+  title={`${calc.title} — ${t(lang, 'calc.howto')}`}
+  description={description}
+  lang={lang}
+  path={`/calculators/${calc.slug}/`}
+  jsonLd={[webApp, breadcrumb]}
+>
+  <p class="muted">
+    <a href={`/${lang}/`}>{t(lang, 'common.home')}</a> ›
+    <a href={`/${lang}/categories/${calc.category}/`}>{navLabel(lang, calc.category)}</a>
+  </p>
+  <h1>{calc.title}</h1>
+  <p class="lead">{t(lang, 'calc.lead')}</p>
+
+  {calc.live && calc.slug === 'mulch-calculator' ? (
+    <MulchCalculator />
+  ) : (
+    <div class="calc"><p class="muted">⚙️ {t(lang, 'calc.comingSoon')}</p></div>
+  )}
+
+  <h2>{t(lang, 'calc.howto')} · {noun}</h2>
+  <p>
+    Measure the length and width of your area in feet and multiply them to get the square footage,
+    then factor in the depth or coverage rate.
+    <em> (Placeholder — localized 1,200–1,800 word guide goes here per the content template.)</em>
+  </p>
+
+  <h2>{t(lang, 'calc.order')}</h2>
+  <p>Always add a waste margin so you don't run short mid-project.</p>
+
+  {related.length > 0 && (
+    <Fragment>
+      <h2>{t(lang, 'calc.related')}</h2>
+      <div class="grid">
+        {related.map((r) => (
+          <a class="card" href={`/${lang}/calculators/${r.slug}/`}>
+            <span class="cat">{navLabel(lang, r.category)}</span>
+            <div class="name">{r.title}</div>
+          </a>
+        ))}
+      </div>
+    </Fragment>
+  )}
+
+  <Faq items={faqItems} title={t(lang, 'faq.title')} />
+
+  <p class="notice">{t(lang, 'calc.disclaimer')}</p>
+</BaseLayout>
