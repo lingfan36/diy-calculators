@@ -49,9 +49,9 @@ export const CALCULATORS: Calculator[] = [
 
   // --- Paint & Walls ---
   { slug: 'interior-paint-calculator', title: 'Interior Paint Calculator', category: 'paint', volume: 'high', priority: 'mvp', live: true },
-  { slug: 'exterior-paint-calculator', title: 'Exterior Paint Calculator', category: 'paint', volume: 'medium', priority: 'extended' },
+  { slug: 'exterior-paint-calculator', title: 'Exterior Paint Calculator', category: 'paint', volume: 'medium', priority: 'extended', live: true },
   { slug: 'wallpaper-calculator', title: 'Wallpaper Calculator', category: 'paint', volume: 'medium', priority: 'extended' },
-  { slug: 'drywall-calculator', title: 'Drywall Calculator', category: 'paint', volume: 'high', priority: 'extended' },
+  { slug: 'drywall-calculator', title: 'Drywall Calculator', category: 'paint', volume: 'high', priority: 'extended', live: true },
   { slug: 'joint-compound-calculator', title: 'Joint Compound Calculator', category: 'paint', volume: 'medium', priority: 'extended' },
   { slug: 'grout-calculator', title: 'Grout Calculator', category: 'paint', volume: 'medium', priority: 'mvp' },
   { slug: 'backsplash-tile-calculator', title: 'Backsplash Tile Calculator', category: 'paint', volume: 'medium', priority: 'extended', live: true },
@@ -61,7 +61,7 @@ export const CALCULATORS: Calculator[] = [
 
   // --- Concrete & Structural ---
   { slug: 'concrete-slab-calculator', title: 'Concrete Slab Calculator', category: 'structural', volume: 'high', priority: 'mvp', live: true },
-  { slug: 'concrete-footing-calculator', title: 'Concrete Footing Calculator', category: 'structural', volume: 'medium', priority: 'extended' },
+  { slug: 'concrete-footing-calculator', title: 'Concrete Footing Calculator', category: 'structural', volume: 'medium', priority: 'extended', live: true },
   { slug: 'concrete-column-calculator', title: 'Concrete Column Calculator', category: 'structural', volume: 'medium', priority: 'extended' },
   { slug: 'concrete-stairs-calculator', title: 'Concrete Stairs Calculator', category: 'structural', volume: 'low', priority: 'extended' },
   { slug: 'board-feet-lumber-calculator', title: 'Board Feet Lumber Calculator', category: 'structural', volume: 'high', priority: 'mvp', live: true },
@@ -84,9 +84,9 @@ export const CALCULATORS: Calculator[] = [
   { slug: 'raised-garden-bed-soil-calculator', title: 'Raised Garden Bed Soil Calculator', category: 'landscaping', volume: 'medium', priority: 'extended' },
 
   // --- Roofing & Exterior ---
-  { slug: 'roofing-shingle-calculator', title: 'Roofing Shingle Calculator', category: 'roofing', volume: 'high', priority: 'extended' },
+  { slug: 'roofing-shingle-calculator', title: 'Roofing Shingle Calculator', category: 'roofing', volume: 'high', priority: 'extended', live: true },
   { slug: 'roof-underlayment-calculator', title: 'Roof Underlayment Calculator', category: 'roofing', volume: 'low', priority: 'extended' },
-  { slug: 'siding-calculator', title: 'Siding Calculator', category: 'roofing', volume: 'medium', priority: 'extended' },
+  { slug: 'siding-calculator', title: 'Siding Calculator', category: 'roofing', volume: 'medium', priority: 'extended', live: true },
   { slug: 'gutter-calculator', title: 'Gutter Calculator', category: 'roofing', volume: 'medium', priority: 'extended' },
   { slug: 'decking-board-calculator', title: 'Decking Board Calculator', category: 'roofing', volume: 'high', priority: 'mvp', live: true },
   { slug: 'deck-joist-calculator', title: 'Deck Joist Calculator', category: 'roofing', volume: 'medium', priority: 'extended' },

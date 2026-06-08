@@ -11,6 +11,7 @@ import SodCalculator from '../../../components/SodCalculator.astro';
 import PaverCalculator from '../../../components/PaverCalculator.astro';
 import DeckingCalculator from '../../../components/DeckingCalculator.astro';
 import TileCalculator from '../../../components/TileCalculator.astro';
+import CoverageCalculator from '../../../components/CoverageCalculator.astro';
 import {
   CALCULATORS,
   getCalculator,
@@ -103,6 +104,16 @@ const faqItems = [
     <FlooringCalculator />
   ) : calc.slug === 'floor-tile-calculator' || calc.slug === 'backsplash-tile-calculator' ? (
     <TileCalculator />
+  ) : calc.slug === 'exterior-paint-calculator' ? (
+    <PaintCalculator />
+  ) : calc.slug === 'concrete-footing-calculator' ? (
+    <ConcreteSlabCalculator />
+  ) : calc.slug === 'drywall-calculator' ? (
+    <CoverageCalculator unitLabel="sheets" defaultCoverage={32} coverageLabel="Sheet coverage (ft²)" />
+  ) : calc.slug === 'roofing-shingle-calculator' ? (
+    <CoverageCalculator unitLabel="bundles" defaultCoverage={33} coverageLabel="Bundle coverage (ft²)" />
+  ) : calc.slug === 'siding-calculator' ? (
+    <CoverageCalculator unitLabel="squares" defaultCoverage={100} coverageLabel="Coverage per square (ft²)" />
   ) : (
     <div class="calc"><p class="muted">⚙️ {t(lang, 'calc.comingSoon')}</p></div>
   )}
