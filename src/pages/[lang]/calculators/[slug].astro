@@ -10,6 +10,7 @@ import BoardFeetCalculator from '../../../components/BoardFeetCalculator.astro';
 import SodCalculator from '../../../components/SodCalculator.astro';
 import PaverCalculator from '../../../components/PaverCalculator.astro';
 import DeckingCalculator from '../../../components/DeckingCalculator.astro';
+import TileCalculator from '../../../components/TileCalculator.astro';
 import {
   CALCULATORS,
   getCalculator,
@@ -90,6 +91,18 @@ const faqItems = [
     <PaverCalculator />
   ) : calc.slug === 'decking-board-calculator' ? (
     <DeckingCalculator />
+  ) : calc.slug === 'crushed-stone-calculator' ? (
+    <GravelCalculator defaultDensity={1.35} />
+  ) : calc.slug === 'topsoil-calculator' ? (
+    <GravelCalculator defaultDensity={1.1} />
+  ) : calc.slug === 'sand-calculator' ? (
+    <GravelCalculator defaultDensity={1.35} />
+  ) : calc.slug === 'river-rock-calculator' ? (
+    <GravelCalculator defaultDensity={1.4} />
+  ) : calc.slug === 'hardwood-flooring-calculator' || calc.slug === 'engineered-wood-flooring-calculator' || calc.slug === 'carpet-calculator' ? (
+    <FlooringCalculator />
+  ) : calc.slug === 'floor-tile-calculator' || calc.slug === 'backsplash-tile-calculator' ? (
+    <TileCalculator />
   ) : (
     <div class="calc"><p class="muted">⚙️ {t(lang, 'calc.comingSoon')}</p></div>
   )}

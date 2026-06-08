@@ -1,0 +1,66 @@
+---
+// Interactive tile calculator (floor / backsplash). Reuses the paver pure
+// function (area ÷ single-tile face). Server markup + client TS.
+---
+
+<div class="calc" id="tile-calc">
+  <div class="row">
+    <label>Area length (ft)
+      <input type="number" id="t-length" min="0" step="any" value="10" />
+    </label>
+    <label>Area width (ft)
+      <input type="number" id="t-width" min="0" step="any" value="10" />
+    </label>
+  </div>
+  <div class="row">
+    <label>Tile length (in)
+      <input type="number" id="t-tlen" min="0" step="any" value="12" />
+    </label>
+    <label>Tile width (in)
+      <input type="number" id="t-twid" min="0" step="any" value="12" />
+    </label>
+    <label>Waste
+      <select id="t-waste">
+        <option value="10" selected>10%</option>
+        <option value="15">15%</option>
+        <option value="20">20%</option>
+      </select>
+    </label>
+    <label>Price / tile ($, optional)
+      <input type="number" id="t-price" min="0" step="any" placeholder="e.g. 3.50" />
+    </label>
+  </div>
+  <button id="t-go" type="button">Calculate</button>
+
+  <div class="result hidden" id="t-result" aria-live="polite">
+    <p>You need <span class="big" id="t-tiles">0</span> tiles</p>
+    <p id="t-detail" class="muted"></p>
+  </div>
+</div>
+
+<script>
+  import { calcPaver } from '../lib/calc/paver';
+
+  const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (id: string) => parseFloat(byId(id).value);
+
+  function run() {
+    const priceRaw = byId('t-price').value;
+    const r = calcPaver({
+      length: num('t-length'),
+      width: num('t-width'),
+      paverLengthInches: num('t-tlen'),
+      paverWidthInches: num('t-twid'),
+      wastePercent: parseFloat(byId('t-waste').value),
+      pricePerPaver: priceRaw ? parseFloat(priceRaw) : undefined,
+    });
+    byId('t-tiles').textContent = String(r.pavers);
+    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    byId('t-detail').textContent =
+      `${r.areaSqFt} ft² · ${r.paverAreaSqFt} ft²/tile → ${r.pavers} tiles${cost}`;
+    document.getElementById('t-result')!.classList.remove('hidden');
+  }
+
+  document.getElementById('t-go')!.addEventListener('click', run);
+  run();
+</script>

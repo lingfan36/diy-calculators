@@ -1,6 +1,12 @@
 ---
-// Interactive gravel calculator: server-rendered markup, client-side math
-// importing the same pure function the unit tests use.
+// Interactive gravel / aggregate calculator: server-rendered markup,
+// client-side math importing the same pure function the unit tests use.
+// `defaultDensity` lets the same component serve gravel, crushed stone,
+// topsoil, sand, river rock (each has a different typical density).
+interface Props {
+  defaultDensity?: number;
+}
+const { defaultDensity = 1.4 } = Astro.props;
 ---
 
 <div class="calc" id="gravel-calc">
@@ -22,7 +28,7 @@
       </select>
     </label>
     <label>Density (ton/yd³)
-      <input type="number" id="g-density" min="0.1" step="any" value="1.4" />
+      <input type="number" id="g-density" min="0.1" step="any" value={defaultDensity} />
     </label>
     <label>Price / ton ($, optional)
       <input type="number" id="g-price" min="0" step="any" placeholder="e.g. 45" />
