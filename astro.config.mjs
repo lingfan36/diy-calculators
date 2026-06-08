@@ -5,7 +5,8 @@ import sitemap from '@astrojs/sitemap';
 // IMPORTANT: change `site` to the real domain before going live —
 // sitemap + canonical URLs are generated from it.
 export default defineConfig({
-  site: 'https://www.example-diycalc.com',
+  // Temporary: live workers.dev subdomain. Change to the custom domain once bought.
+  site: 'https://diy-calculators.2892672257.workers.dev',
   integrations: [sitemap()],
   build: { format: 'directory' },
   i18n: {

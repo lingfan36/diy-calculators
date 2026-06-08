@@ -12,5 +12,5 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-# TODO: update host to the real domain (must match astro.config `site`)
-Sitemap: https://www.example-diycalc.com/sitemap-index.xml
+# Temporary workers.dev host until a custom domain is bought (must match astro.config `site`)
+Sitemap: https://diy-calculators.2892672257.workers.dev/sitemap-index.xml
