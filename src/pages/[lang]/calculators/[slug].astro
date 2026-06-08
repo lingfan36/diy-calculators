@@ -19,6 +19,7 @@ import {
   byCategory,
 } from '../../../data/calculators';
 import { calculatorLabels, calculatorTitle, locales, t, navLabel, type Lang } from '../../../i18n/ui';
+import { getGuide } from '../../../data/guides';
 
 export function getStaticPaths() {
   return locales.flatMap((lang) =>
@@ -34,6 +35,7 @@ const localizedTitle = calculatorTitle(lang, calc.slug, calc.title);
 const description = calc.metaDescription ?? `${localizedTitle}: ${t(lang, 'calc.metaBody')}`;
 const noun = localizedTitle.replace(' Calculator', '');
 const labels = calculatorLabels(lang);
+const guide = getGuide(lang, calc.slug);
 
 const webApp = {
   '@context': 'https://schema.org',
@@ -55,6 +57,7 @@ const breadcrumb = {
 };
 
 const faqItems = [
+  ...(guide?.faq ?? []),
   { q: t(lang, 'faq.q1'), a: t(lang, 'faq.a1') },
   { q: t(lang, 'faq.q2'), a: t(lang, 'faq.a2') },
 ];
@@ -66,6 +69,7 @@ const faqItems = [
   lang={lang}
   path={`/calculators/${calc.slug}/`}
   jsonLd={[webApp, breadcrumb]}
+  noindex={!calc.live}
 >
   <p class="breadcrumb">
     <a href={`/${lang}/`}>{t(lang, 'common.home')}</a><span>/</span>
@@ -123,11 +127,26 @@ const faqItems = [
 
   <h2>{t(lang, 'calc.howto')} · {noun}</h2>
   <div class="guide-panel">
-    <p>{t(lang, 'calc.guideIntro')}</p>
+    {guide ? (
+      <Fragment>
+        <p>{guide.intro}</p>
+        <ol class="guide-steps">{guide.steps.map((s) => <li>{s}</li>)}</ol>
+      </Fragment>
+    ) : (
+      <p>{t(lang, 'calc.guideIntro')}</p>
+    )}
   </div>
 
   <h2>{t(lang, 'calc.order')}</h2>
-  <p>{t(lang, 'calc.orderGuide')}</p>
+  {guide && guide.factors.length > 0 ? (
+    <ul class="factor-list">
+      {guide.factors.map((f) => (
+        <li><strong>{f.label}.</strong> {f.detail}</li>
+      ))}
+    </ul>
+  ) : (
+    <p>{t(lang, 'calc.orderGuide')}</p>
+  )}
 
   {related.length > 0 && (
     <Fragment>

@@ -10,9 +10,10 @@ interface Props {
   /** locale-relative path, starts with '/', e.g. '/calculators/mulch-calculator/' or '/' */
   path: string;
   jsonLd?: object[];
+  noindex?: boolean;
 }
 
-const { title, description, lang, path, jsonLd = [] } = Astro.props;
+const { title, description, lang, path, jsonLd = [], noindex = false } = Astro.props;
 const rel = path === '/' ? '/' : path;
 const canonical = new URL(`/${lang}${rel}`, Astro.site).href;
 const alternates = locales.map((l) => ({
@@ -34,6 +35,7 @@ const alternates = locales.map((l) => ({
     />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
     <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
