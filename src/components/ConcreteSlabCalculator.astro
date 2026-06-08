@@ -1,0 +1,66 @@
+---
+// Interactive concrete slab calculator: server-rendered markup, client-side
+// math importing the same pure function the unit tests use.
+---
+
+<div class="calc" id="slab-calc">
+  <div class="row">
+    <label>Length (ft)
+      <input type="number" id="s-length" min="0" step="any" value="10" />
+    </label>
+    <label>Width (ft)
+      <input type="number" id="s-width" min="0" step="any" value="10" />
+    </label>
+  </div>
+  <div class="row">
+    <label>Thickness (in)
+      <select id="s-thick">
+        <option value="4" selected>4"</option>
+        <option value="6">6"</option>
+        <option value="8">8"</option>
+      </select>
+    </label>
+    <label>Bag size (lb)
+      <select id="s-bag">
+        <option value="40">40 lb</option>
+        <option value="60">60 lb</option>
+        <option value="80" selected>80 lb</option>
+      </select>
+    </label>
+    <label>Price / yd³ ($, optional)
+      <input type="number" id="s-price" min="0" step="any" placeholder="e.g. 150" />
+    </label>
+  </div>
+  <button id="s-go" type="button">Calculate</button>
+
+  <div class="result hidden" id="s-result" aria-live="polite">
+    <p>You need <span class="big" id="s-yards">0</span> cubic yards</p>
+    <p id="s-detail" class="muted"></p>
+  </div>
+</div>
+
+<script>
+  import { calcConcreteSlab } from '../lib/calc/concrete-slab';
+
+  const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (id: string) => parseFloat(byId(id).value);
+
+  function run() {
+    const priceRaw = byId('s-price').value;
+    const r = calcConcreteSlab({
+      length: num('s-length'),
+      width: num('s-width'),
+      thicknessInches: parseFloat(byId('s-thick').value),
+      bagSizeLb: parseInt(byId('s-bag').value, 10),
+      pricePerYard: priceRaw ? parseFloat(priceRaw) : undefined,
+    });
+    byId('s-yards').textContent = String(r.cubicYards);
+    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    byId('s-detail').textContent =
+      `${r.cubicFeet} ft³ · ${r.bags} × ${r.bagSizeLb}lb bags${cost}`;
+    document.getElementById('s-result')!.classList.remove('hidden');
+  }
+
+  document.getElementById('s-go')!.addEventListener('click', run);
+  run();
+</script>

@@ -1,0 +1,64 @@
+---
+// Interactive gravel calculator: server-rendered markup, client-side math
+// importing the same pure function the unit tests use.
+---
+
+<div class="calc" id="gravel-calc">
+  <div class="row">
+    <label>Length (ft)
+      <input type="number" id="g-length" min="0" step="any" value="10" />
+    </label>
+    <label>Width (ft)
+      <input type="number" id="g-width" min="0" step="any" value="10" />
+    </label>
+  </div>
+  <div class="row">
+    <label>Depth (in)
+      <select id="g-depth">
+        <option value="2">2"</option>
+        <option value="3" selected>3"</option>
+        <option value="4">4"</option>
+        <option value="6">6"</option>
+      </select>
+    </label>
+    <label>Density (ton/yd³)
+      <input type="number" id="g-density" min="0.1" step="any" value="1.4" />
+    </label>
+    <label>Price / ton ($, optional)
+      <input type="number" id="g-price" min="0" step="any" placeholder="e.g. 45" />
+    </label>
+  </div>
+  <button id="g-go" type="button">Calculate</button>
+
+  <div class="result hidden" id="g-result" aria-live="polite">
+    <p>You need <span class="big" id="g-yards">0</span> cubic yards (<span id="g-tons">0</span> tons)</p>
+    <p id="g-detail" class="muted"></p>
+  </div>
+</div>
+
+<script>
+  import { calcGravel } from '../lib/calc/gravel';
+
+  const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (id: string) => parseFloat(byId(id).value);
+
+  function run() {
+    const priceRaw = byId('g-price').value;
+    const r = calcGravel({
+      length: num('g-length'),
+      width: num('g-width'),
+      depthInches: parseFloat(byId('g-depth').value),
+      densityTonsPerYard: num('g-density'),
+      pricePerTon: priceRaw ? parseFloat(priceRaw) : undefined,
+    });
+    byId('g-yards').textContent = String(r.cubicYards);
+    byId('g-tons').textContent = String(r.tons);
+    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    byId('g-detail').textContent =
+      `${r.areaSqFt} ft² area · ${r.cubicFeet} ft³ · ${r.tons} tons${cost}`;
+    document.getElementById('g-result')!.classList.remove('hidden');
+  }
+
+  document.getElementById('g-go')!.addEventListener('click', run);
+  run();
+</script>

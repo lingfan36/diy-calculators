@@ -2,6 +2,8 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Faq from '../../../components/Faq.astro';
 import MulchCalculator from '../../../components/MulchCalculator.astro';
+import GravelCalculator from '../../../components/GravelCalculator.astro';
+import ConcreteSlabCalculator from '../../../components/ConcreteSlabCalculator.astro';
 import {
   CALCULATORS,
   getCalculator,
@@ -64,8 +66,12 @@ const faqItems = [
   <h1>{calc.title}</h1>
   <p class="lead">{t(lang, 'calc.lead')}</p>
 
-  {calc.live && calc.slug === 'mulch-calculator' ? (
+  {calc.slug === 'mulch-calculator' ? (
     <MulchCalculator />
+  ) : calc.slug === 'gravel-calculator' ? (
+    <GravelCalculator />
+  ) : calc.slug === 'concrete-slab-calculator' ? (
+    <ConcreteSlabCalculator />
   ) : (
     <div class="calc"><p class="muted">⚙️ {t(lang, 'calc.comingSoon')}</p></div>
   )}

@@ -60,7 +60,7 @@ export const CALCULATORS: Calculator[] = [
   { slug: 'ceiling-paint-calculator', title: 'Ceiling Paint Calculator', category: 'paint', volume: 'low', priority: 'extended' },
 
   // --- Concrete & Structural ---
-  { slug: 'concrete-slab-calculator', title: 'Concrete Slab Calculator', category: 'structural', volume: 'high', priority: 'mvp' },
+  { slug: 'concrete-slab-calculator', title: 'Concrete Slab Calculator', category: 'structural', volume: 'high', priority: 'mvp', live: true },
   { slug: 'concrete-footing-calculator', title: 'Concrete Footing Calculator', category: 'structural', volume: 'medium', priority: 'extended' },
   { slug: 'concrete-column-calculator', title: 'Concrete Column Calculator', category: 'structural', volume: 'medium', priority: 'extended' },
   { slug: 'concrete-stairs-calculator', title: 'Concrete Stairs Calculator', category: 'structural', volume: 'low', priority: 'extended' },
@@ -73,7 +73,7 @@ export const CALCULATORS: Calculator[] = [
 
   // --- Landscaping ---
   { slug: 'mulch-calculator', title: 'Mulch Calculator', category: 'landscaping', volume: 'high', priority: 'mvp', live: true },
-  { slug: 'gravel-calculator', title: 'Gravel Calculator', category: 'landscaping', volume: 'high', priority: 'mvp' },
+  { slug: 'gravel-calculator', title: 'Gravel Calculator', category: 'landscaping', volume: 'high', priority: 'mvp', live: true },
   { slug: 'crushed-stone-calculator', title: 'Crushed Stone Calculator', category: 'landscaping', volume: 'medium', priority: 'extended' },
   { slug: 'topsoil-calculator', title: 'Topsoil Calculator', category: 'landscaping', volume: 'high', priority: 'extended' },
   { slug: 'sand-calculator', title: 'Sand Calculator', category: 'landscaping', volume: 'medium', priority: 'extended' },
