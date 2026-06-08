@@ -1,5 +1,11 @@
-# Lets you also deploy from the CLI: `npx wrangler pages deploy dist`
-# (the GitHub-connected build in the CF dashboard does NOT need this file,
-#  but it documents the project name + output dir and enables CLI deploys.)
+# Cloudflare Workers static-assets deploy.
+# Dashboard "Workers Builds": Build command `npm run build` produces ./dist,
+# then "Deploy command" `npx wrangler deploy` serves ./dist as static assets.
 name = "diy-calculators"
-pages_build_output_dir = "dist"
+compatibility_date = "2026-06-08"
+
+[assets]
+directory = "./dist"
+# directory-format build emits /en/index.html etc; auto-trailing-slash handles routing.
+html_handling = "auto-trailing-slash"
+not_found_handling = "none"
