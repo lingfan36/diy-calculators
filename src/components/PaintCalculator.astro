@@ -1,46 +1,57 @@
 ---
 // Interactive interior paint calculator. Server-rendered markup, client-side
 // math importing the same pure function the unit tests use.
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = calculatorLabels(lang);
 ---
 
 <div class="calc" id="paint-calc">
   <div class="row">
-    <label>Room length (ft)
+    <label>{labels.roomLength}
       <input type="number" id="p-length" min="0" step="any" value="12" />
     </label>
-    <label>Room width (ft)
+    <label>{labels.roomWidth}
       <input type="number" id="p-width" min="0" step="any" value="10" />
     </label>
-    <label>Ceiling height (ft)
+    <label>{labels.height}
       <input type="number" id="p-height" min="0" step="any" value="8" />
     </label>
   </div>
   <div class="row">
-    <label>Coats
+    <label>{labels.coats}
       <select id="p-coats">
         <option value="1">1</option>
         <option value="2" selected>2</option>
         <option value="3">3</option>
       </select>
     </label>
-    <label>Doors/windows (ft², optional)
-      <input type="number" id="p-open" min="0" step="any" placeholder="e.g. 40" />
+    <label>{labels.openings}
+      <input type="number" id="p-open" min="0" step="any" placeholder={`${labels.example} 40`} />
     </label>
-    <label>Price / gallon ($, optional)
-      <input type="number" id="p-price" min="0" step="any" placeholder="e.g. 35" />
+    <label>{labels.priceGallon}
+      <input type="number" id="p-price" min="0" step="any" placeholder={`${labels.example} 35`} />
     </label>
   </div>
-  <button id="p-go" type="button">Calculate</button>
+  <button id="p-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="p-result" aria-live="polite">
-    <p>You need <span class="big" id="p-gal">0</span> gallons</p>
+    <p>{labels.youNeed} <span class="big" id="p-gal">0</span> {labels.gallons}</p>
     <p id="p-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="p-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcPaint } from '../lib/calc/paint';
 
+  const labels = JSON.parse(document.getElementById('p-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -56,9 +67,9 @@
       pricePerGallon: priceRaw ? parseFloat(priceRaw) : undefined,
     });
     byId('p-gal').textContent = String(r.gallons);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('p-detail').textContent =
-      `${r.wallAreaSqFt} ft² walls × ${r.coats} coats = ${r.gallonsExact} gal → buy ${r.gallons}${cost}`;
+      `${r.wallAreaSqFt} ft² ${labels.walls} x ${r.coats} ${labels.coats} = ${r.gallonsExact} gal -> ${labels.buy} ${r.gallons}${cost}`;
     document.getElementById('p-result')!.classList.remove('hidden');
   }
 

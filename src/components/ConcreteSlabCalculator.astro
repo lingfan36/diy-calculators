@@ -1,47 +1,58 @@
 ---
 // Interactive concrete slab calculator: server-rendered markup, client-side
 // math importing the same pure function the unit tests use.
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = calculatorLabels(lang);
 ---
 
 <div class="calc" id="slab-calc">
   <div class="row">
-    <label>Length (ft)
+    <label>{labels.length}
       <input type="number" id="s-length" min="0" step="any" value="10" />
     </label>
-    <label>Width (ft)
+    <label>{labels.width}
       <input type="number" id="s-width" min="0" step="any" value="10" />
     </label>
   </div>
   <div class="row">
-    <label>Thickness (in)
+    <label>{labels.thickness}
       <select id="s-thick">
         <option value="4" selected>4"</option>
         <option value="6">6"</option>
         <option value="8">8"</option>
       </select>
     </label>
-    <label>Bag size (lb)
+    <label>{labels.bagSizeLb}
       <select id="s-bag">
         <option value="40">40 lb</option>
         <option value="60">60 lb</option>
         <option value="80" selected>80 lb</option>
       </select>
     </label>
-    <label>Price / yd³ ($, optional)
-      <input type="number" id="s-price" min="0" step="any" placeholder="e.g. 150" />
+    <label>{labels.priceYard}
+      <input type="number" id="s-price" min="0" step="any" placeholder={`${labels.example} 150`} />
     </label>
   </div>
-  <button id="s-go" type="button">Calculate</button>
+  <button id="s-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="s-result" aria-live="polite">
-    <p>You need <span class="big" id="s-yards">0</span> cubic yards</p>
+    <p>{labels.youNeed} <span class="big" id="s-yards">0</span> {labels.cubicYards}</p>
     <p id="s-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="s-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcConcreteSlab } from '../lib/calc/concrete-slab';
 
+  const labels = JSON.parse(document.getElementById('s-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -55,9 +66,9 @@
       pricePerYard: priceRaw ? parseFloat(priceRaw) : undefined,
     });
     byId('s-yards').textContent = String(r.cubicYards);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('s-detail').textContent =
-      `${r.cubicFeet} ft³ · ${r.bags} × ${r.bagSizeLb}lb bags${cost}`;
+      `${r.cubicFeet} ft³ · ${r.bags} x ${r.bagSizeLb}lb ${labels.bags}${cost}`;
     document.getElementById('s-result')!.classList.remove('hidden');
   }
 

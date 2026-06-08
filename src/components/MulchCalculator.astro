@@ -1,43 +1,54 @@
 ---
 // Interactive mulch calculator. Markup is server-rendered (SEO-friendly);
 // the math runs client-side, importing the SAME pure function the unit tests use.
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = calculatorLabels(lang);
 ---
 
 <div class="calc" id="mulch-calc">
   <div class="row">
-    <label>Length (ft)
+    <label>{labels.length}
       <input type="number" id="m-length" min="0" step="any" value="10" />
     </label>
-    <label>Width (ft)
+    <label>{labels.width}
       <input type="number" id="m-width" min="0" step="any" value="10" />
     </label>
   </div>
   <div class="row">
-    <label>Depth (in)
+    <label>{labels.depth}
       <select id="m-depth">
         <option value="2">2"</option>
         <option value="3" selected>3"</option>
         <option value="4">4"</option>
       </select>
     </label>
-    <label>Bag size (ft³)
+    <label>{labels.bagSize}
       <input type="number" id="m-bag" min="0.1" step="any" value="2" />
     </label>
-    <label>Price / yd³ ($, optional)
-      <input type="number" id="m-price" min="0" step="any" placeholder="e.g. 35" />
+    <label>{labels.priceYard}
+      <input type="number" id="m-price" min="0" step="any" placeholder={`${labels.example} 35`} />
     </label>
   </div>
-  <button id="m-go" type="button">Calculate</button>
+  <button id="m-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="m-result" aria-live="polite">
-    <p>You need <span class="big" id="m-yards">0</span> cubic yards of mulch</p>
+    <p>{labels.youNeed} <span class="big" id="m-yards">0</span> {labels.cubicYardsOfMulch}</p>
     <p id="m-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="m-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcMulch } from '../lib/calc/mulch';
 
+  const labels = JSON.parse(document.getElementById('m-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -51,9 +62,9 @@
       pricePerYard: priceRaw ? parseFloat(priceRaw) : undefined,
     });
     byId('m-yards').textContent = String(r.cubicYards);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('m-detail').textContent =
-      `${r.areaSqFt} ft² area · ${r.cubicFeet} ft³ · about ${r.bags} bags${cost}`;
+      `${r.areaSqFt} ft² ${labels.area} · ${r.cubicFeet} ft³ · ${labels.about} ${r.bags} ${labels.bags}${cost}`;
     document.getElementById('m-result')!.classList.remove('hidden');
   }
 

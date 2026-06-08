@@ -3,23 +3,27 @@
 // client-side math importing the same pure function the unit tests use.
 // `defaultDensity` lets the same component serve gravel, crushed stone,
 // topsoil, sand, river rock (each has a different typical density).
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
 interface Props {
   defaultDensity?: number;
+  lang?: Lang;
 }
-const { defaultDensity = 1.4 } = Astro.props;
+const { defaultDensity = 1.4, lang = 'en' } = Astro.props;
+const labels = calculatorLabels(lang);
 ---
 
 <div class="calc" id="gravel-calc">
   <div class="row">
-    <label>Length (ft)
+    <label>{labels.length}
       <input type="number" id="g-length" min="0" step="any" value="10" />
     </label>
-    <label>Width (ft)
+    <label>{labels.width}
       <input type="number" id="g-width" min="0" step="any" value="10" />
     </label>
   </div>
   <div class="row">
-    <label>Depth (in)
+    <label>{labels.depth}
       <select id="g-depth">
         <option value="2">2"</option>
         <option value="3" selected>3"</option>
@@ -27,24 +31,27 @@ const { defaultDensity = 1.4 } = Astro.props;
         <option value="6">6"</option>
       </select>
     </label>
-    <label>Density (ton/yd³)
+    <label>{labels.density}
       <input type="number" id="g-density" min="0.1" step="any" value={defaultDensity} />
     </label>
-    <label>Price / ton ($, optional)
-      <input type="number" id="g-price" min="0" step="any" placeholder="e.g. 45" />
+    <label>{labels.priceTon}
+      <input type="number" id="g-price" min="0" step="any" placeholder={`${labels.example} 45`} />
     </label>
   </div>
-  <button id="g-go" type="button">Calculate</button>
+  <button id="g-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="g-result" aria-live="polite">
-    <p>You need <span class="big" id="g-yards">0</span> cubic yards (<span id="g-tons">0</span> tons)</p>
+    <p>{labels.youNeed} <span class="big" id="g-yards">0</span> {labels.cubicYards} (<span id="g-tons">0</span> {labels.tons})</p>
     <p id="g-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="g-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcGravel } from '../lib/calc/gravel';
 
+  const labels = JSON.parse(document.getElementById('g-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -59,9 +66,9 @@ const { defaultDensity = 1.4 } = Astro.props;
     });
     byId('g-yards').textContent = String(r.cubicYards);
     byId('g-tons').textContent = String(r.tons);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('g-detail').textContent =
-      `${r.areaSqFt} ft² area · ${r.cubicFeet} ft³ · ${r.tons} tons${cost}`;
+      `${r.areaSqFt} ft² ${labels.area} · ${r.cubicFeet} ft³ · ${r.tons} ${labels.tons}${cost}`;
     document.getElementById('g-result')!.classList.remove('hidden');
   }
 

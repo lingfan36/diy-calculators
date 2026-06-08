@@ -1,46 +1,57 @@
 ---
 // Interactive decking board calculator. Server-rendered markup, client-side
 // math importing the same pure function the unit tests use.
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = calculatorLabels(lang);
 ---
 
 <div class="calc" id="deck-calc">
   <div class="row">
-    <label>Deck length (ft)
+    <label>{labels.deckLength}
       <input type="number" id="d-length" min="0" step="any" value="16" />
     </label>
-    <label>Deck width (ft)
+    <label>{labels.deckWidth}
       <input type="number" id="d-width" min="0" step="any" value="12" />
     </label>
   </div>
   <div class="row">
-    <label>Board width (in)
+    <label>{labels.boardWidth}
       <input type="number" id="d-bwid" min="0" step="any" value="5.5" />
     </label>
-    <label>Board length (ft)
+    <label>{labels.boardLength}
       <input type="number" id="d-blen" min="0" step="any" value="8" />
     </label>
-    <label>Waste
+    <label>{labels.waste}
       <select id="d-waste">
         <option value="5">5%</option>
         <option value="10" selected>10%</option>
         <option value="15">15%</option>
       </select>
     </label>
-    <label>Price / board ($, optional)
-      <input type="number" id="d-price" min="0" step="any" placeholder="e.g. 22" />
+    <label>{labels.priceBoard}
+      <input type="number" id="d-price" min="0" step="any" placeholder={`${labels.example} 22`} />
     </label>
   </div>
-  <button id="d-go" type="button">Calculate</button>
+  <button id="d-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="d-result" aria-live="polite">
-    <p>You need <span class="big" id="d-boards">0</span> boards</p>
+    <p>{labels.youNeed} <span class="big" id="d-boards">0</span> {labels.boards}</p>
     <p id="d-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="d-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcDecking } from '../lib/calc/decking';
 
+  const labels = JSON.parse(document.getElementById('d-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -55,9 +66,9 @@
       pricePerBoard: priceRaw ? parseFloat(priceRaw) : undefined,
     });
     byId('d-boards').textContent = String(r.boards);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('d-detail').textContent =
-      `${r.deckAreaSqFt} ft² · ${r.boardCoverageSqFt} ft²/board → ${r.boards} boards${cost}`;
+      `${r.deckAreaSqFt} ft² · ${r.boardCoverageSqFt} ft²/${labels.boards} -> ${r.boards} ${labels.boards}${cost}`;
     document.getElementById('d-result')!.classList.remove('hidden');
   }
 

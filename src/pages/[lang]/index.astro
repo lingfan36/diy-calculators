@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { CALCULATORS, CATEGORIES } from '../../data/calculators';
-import { locales, t, navLabel, type Lang } from '../../i18n/ui';
+import { categoryBlurb, calculatorTitle, locales, t, navLabel, type Lang } from '../../i18n/ui';
 
 export function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang } }));
@@ -79,7 +79,7 @@ const description = t(lang, 'index.lead');
     {mvp.map((c) => (
       <a class="card" href={`/${lang}/calculators/${c.slug}/`}>
         <span class="cat">{navLabel(lang, c.category)}</span>
-        <div class="name">{c.title}{c.live ? <span class="badge">live</span> : null}</div>
+        <div class="name">{calculatorTitle(lang, c.slug, c.title)}{c.live ? <span class="badge">live</span> : null}</div>
         <span class="desc">{t(lang, 'index.cardDesc')}</span>
       </a>
     ))}
@@ -95,7 +95,7 @@ const description = t(lang, 'index.lead');
     {categoryStats.map((c) => (
       <a class="card" href={`/${lang}/categories/${c.slug}/`}>
         <div class="name">{navLabel(lang, c.slug)}</div>
-        <span class="desc">{c.blurb}</span>
+        <span class="desc">{categoryBlurb(lang, c.slug, c.blurb)}</span>
         <span class="cat">{c.total} {t(lang, 'index.categoryStats')} · {c.live} {t(lang, 'index.liveShort')}</span>
       </a>
     ))}

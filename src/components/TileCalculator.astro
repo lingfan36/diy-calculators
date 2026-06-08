@@ -1,46 +1,57 @@
 ---
 // Interactive tile calculator (floor / backsplash). Reuses the paver pure
 // function (area ÷ single-tile face). Server markup + client TS.
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = calculatorLabels(lang);
 ---
 
 <div class="calc" id="tile-calc">
   <div class="row">
-    <label>Area length (ft)
+    <label>{labels.areaLength}
       <input type="number" id="t-length" min="0" step="any" value="10" />
     </label>
-    <label>Area width (ft)
+    <label>{labels.areaWidth}
       <input type="number" id="t-width" min="0" step="any" value="10" />
     </label>
   </div>
   <div class="row">
-    <label>Tile length (in)
+    <label>{labels.tileLength}
       <input type="number" id="t-tlen" min="0" step="any" value="12" />
     </label>
-    <label>Tile width (in)
+    <label>{labels.tileWidth}
       <input type="number" id="t-twid" min="0" step="any" value="12" />
     </label>
-    <label>Waste
+    <label>{labels.waste}
       <select id="t-waste">
         <option value="10" selected>10%</option>
         <option value="15">15%</option>
         <option value="20">20%</option>
       </select>
     </label>
-    <label>Price / tile ($, optional)
-      <input type="number" id="t-price" min="0" step="any" placeholder="e.g. 3.50" />
+    <label>{labels.priceTile}
+      <input type="number" id="t-price" min="0" step="any" placeholder={`${labels.example} 3.50`} />
     </label>
   </div>
-  <button id="t-go" type="button">Calculate</button>
+  <button id="t-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="t-result" aria-live="polite">
-    <p>You need <span class="big" id="t-tiles">0</span> tiles</p>
+    <p>{labels.youNeed} <span class="big" id="t-tiles">0</span> {labels.tiles}</p>
     <p id="t-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="t-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcPaver } from '../lib/calc/paver';
 
+  const labels = JSON.parse(document.getElementById('t-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -55,9 +66,9 @@
       pricePerPaver: priceRaw ? parseFloat(priceRaw) : undefined,
     });
     byId('t-tiles').textContent = String(r.pavers);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('t-detail').textContent =
-      `${r.areaSqFt} ft² · ${r.paverAreaSqFt} ft²/tile → ${r.pavers} tiles${cost}`;
+      `${r.areaSqFt} ft² · ${r.paverAreaSqFt} ft²/${labels.tiles} -> ${r.pavers} ${labels.tiles}${cost}`;
     document.getElementById('t-result')!.classList.remove('hidden');
   }
 

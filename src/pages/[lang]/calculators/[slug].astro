@@ -16,10 +16,8 @@ import {
   CALCULATORS,
   getCalculator,
   byCategory,
-  categoryInfo,
-  defaultMetaDescription,
 } from '../../../data/calculators';
-import { locales, t, navLabel, type Lang } from '../../../i18n/ui';
+import { calculatorLabels, calculatorTitle, locales, t, navLabel, type Lang } from '../../../i18n/ui';
 
 export function getStaticPaths() {
   return locales.flatMap((lang) =>
@@ -30,15 +28,16 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const slug = Astro.params.slug!;
 const calc = getCalculator(slug)!;
-const cat = categoryInfo(calc.category);
 const related = byCategory(calc.category).filter((c) => c.slug !== calc.slug).slice(0, 6);
-const description = calc.metaDescription ?? defaultMetaDescription(calc);
-const noun = calc.title.replace(' Calculator', '');
+const localizedTitle = calculatorTitle(lang, calc.slug, calc.title);
+const description = calc.metaDescription ?? `${localizedTitle}: ${t(lang, 'calc.metaBody')}`;
+const noun = localizedTitle.replace(' Calculator', '');
+const labels = calculatorLabels(lang);
 
 const webApp = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: calc.title,
+  name: localizedTitle,
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'Any',
   inLanguage: lang,
@@ -50,7 +49,7 @@ const breadcrumb = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: t(lang, 'common.home'), item: new URL(`/${lang}/`, Astro.site).href },
     { '@type': 'ListItem', position: 2, name: navLabel(lang, calc.category), item: new URL(`/${lang}/categories/${calc.category}/`, Astro.site).href },
-    { '@type': 'ListItem', position: 3, name: calc.title },
+    { '@type': 'ListItem', position: 3, name: localizedTitle },
   ],
 };
 
@@ -61,7 +60,7 @@ const faqItems = [
 ---
 
 <BaseLayout
-  title={`${calc.title} — ${t(lang, 'calc.howto')}`}
+  title={`${localizedTitle} - ${t(lang, 'calc.howto')}`}
   description={description}
   lang={lang}
   path={`/calculators/${calc.slug}/`}
@@ -73,69 +72,61 @@ const faqItems = [
   </p>
   <section class="content-narrow">
     <span class="eyebrow">{navLabel(lang, calc.category)}</span>
-    <h1>{calc.title}</h1>
+    <h1>{localizedTitle}</h1>
     <p class="lead">{t(lang, 'calc.lead')}</p>
   </section>
 
   {calc.slug === 'mulch-calculator' ? (
-    <MulchCalculator />
+    <MulchCalculator lang={lang} />
   ) : calc.slug === 'gravel-calculator' ? (
-    <GravelCalculator />
+    <GravelCalculator lang={lang} />
   ) : calc.slug === 'concrete-slab-calculator' ? (
-    <ConcreteSlabCalculator />
+    <ConcreteSlabCalculator lang={lang} />
   ) : calc.slug === 'laminate-flooring-calculator' || calc.slug === 'vinyl-plank-flooring-calculator' ? (
-    <FlooringCalculator />
+    <FlooringCalculator lang={lang} />
   ) : calc.slug === 'interior-paint-calculator' ? (
-    <PaintCalculator />
+    <PaintCalculator lang={lang} />
   ) : calc.slug === 'board-feet-lumber-calculator' ? (
-    <BoardFeetCalculator />
+    <BoardFeetCalculator lang={lang} />
   ) : calc.slug === 'sod-calculator' ? (
-    <SodCalculator />
+    <SodCalculator lang={lang} />
   ) : calc.slug === 'paver-calculator' ? (
-    <PaverCalculator />
+    <PaverCalculator lang={lang} />
   ) : calc.slug === 'decking-board-calculator' ? (
-    <DeckingCalculator />
+    <DeckingCalculator lang={lang} />
   ) : calc.slug === 'crushed-stone-calculator' ? (
-    <GravelCalculator defaultDensity={1.35} />
+    <GravelCalculator defaultDensity={1.35} lang={lang} />
   ) : calc.slug === 'topsoil-calculator' ? (
-    <GravelCalculator defaultDensity={1.1} />
+    <GravelCalculator defaultDensity={1.1} lang={lang} />
   ) : calc.slug === 'sand-calculator' ? (
-    <GravelCalculator defaultDensity={1.35} />
+    <GravelCalculator defaultDensity={1.35} lang={lang} />
   ) : calc.slug === 'river-rock-calculator' ? (
-    <GravelCalculator defaultDensity={1.4} />
+    <GravelCalculator defaultDensity={1.4} lang={lang} />
   ) : calc.slug === 'hardwood-flooring-calculator' || calc.slug === 'engineered-wood-flooring-calculator' || calc.slug === 'carpet-calculator' ? (
-    <FlooringCalculator />
+    <FlooringCalculator lang={lang} />
   ) : calc.slug === 'floor-tile-calculator' || calc.slug === 'backsplash-tile-calculator' ? (
-    <TileCalculator />
+    <TileCalculator lang={lang} />
   ) : calc.slug === 'exterior-paint-calculator' ? (
-    <PaintCalculator />
+    <PaintCalculator lang={lang} />
   ) : calc.slug === 'concrete-footing-calculator' ? (
-    <ConcreteSlabCalculator />
+    <ConcreteSlabCalculator lang={lang} />
   ) : calc.slug === 'drywall-calculator' ? (
-    <CoverageCalculator unitLabel="sheets" defaultCoverage={32} coverageLabel="Sheet coverage (ft²)" />
+    <CoverageCalculator unitLabel={labels.sheets} defaultCoverage={32} coverageLabel={labels.sheetCoverage} lang={lang} />
   ) : calc.slug === 'roofing-shingle-calculator' ? (
-    <CoverageCalculator unitLabel="bundles" defaultCoverage={33} coverageLabel="Bundle coverage (ft²)" />
+    <CoverageCalculator unitLabel={labels.bundles} defaultCoverage={33} coverageLabel={labels.bundleCoverage} lang={lang} />
   ) : calc.slug === 'siding-calculator' ? (
-    <CoverageCalculator unitLabel="squares" defaultCoverage={100} coverageLabel="Coverage per square (ft²)" />
+    <CoverageCalculator unitLabel={labels.squares} defaultCoverage={100} coverageLabel={labels.squareCoverage} lang={lang} />
   ) : (
     <div class="calc"><p class="muted">{t(lang, 'calc.comingSoon')}</p></div>
   )}
 
   <h2>{t(lang, 'calc.howto')} · {noun}</h2>
   <div class="guide-panel">
-    <p>
-      Start with the measured area, then apply the product coverage, depth, thickness, or waste
-      allowance that matches the material. The calculator above keeps the core math visible so you
-      can compare the result against the package size or supplier quote.
-    </p>
+    <p>{t(lang, 'calc.guideIntro')}</p>
   </div>
 
   <h2>{t(lang, 'calc.order')}</h2>
-  <p>
-    For straight layouts, a small waste allowance is usually enough. Increase the allowance for
-    diagonal patterns, irregular rooms, fragile materials, or jobs where matching a future batch
-    would be difficult.
-  </p>
+  <p>{t(lang, 'calc.orderGuide')}</p>
 
   {related.length > 0 && (
     <Fragment>
@@ -144,7 +135,7 @@ const faqItems = [
         {related.map((r) => (
           <a class="card" href={`/${lang}/calculators/${r.slug}/`}>
             <span class="cat">{navLabel(lang, r.category)}</span>
-            <div class="name">{r.title}</div>
+            <div class="name">{calculatorTitle(lang, r.slug, r.title)}</div>
           </a>
         ))}
       </div>

@@ -69,11 +69,11 @@ Config in this repo:
 - `astro.config.mjs` → `site`
 - `public/robots.txt` → `Sitemap:` line
 
-## Status (scaffold)
+## Status
 - ✅ 50 SEO pages generate (5 category hubs + index + sitemap).
-- ✅ **Mulch calculator** is the fully working sample (calc + UI + schema).
-- ⬜ Other 49 render the SEO shell + "coming soon" + guide placeholder.
-- ⬜ Replace placeholder copy with 1,200–1,800 word guides (content template).
+- ✅ 24 calculators currently render interactive tools with shared client-side math.
+- ✅ Responsive calculator-focused UI, localized hub copy, hreflang, FAQ schema and sitemap generation.
+- ⬜ 26 calculators still render the SEO shell + "coming soon" state.
+- ⬜ Replace short guide copy with full 1,200–1,800 word localized guides.
 - ⬜ Set real domain in `astro.config.mjs` `site` and `public/robots.txt`.
 - ⬜ Add ad slots / affiliate links once content is in.
-```

@@ -2,7 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { CATEGORIES, byCategory } from '../../../data/calculators';
 import type { Category } from '../../../data/calculators';
-import { locales, t, navLabel, type Lang } from '../../../i18n/ui';
+import { calculatorTitle, locales, t, navLabel, type Lang } from '../../../i18n/ui';
 
 export function getStaticPaths() {
   return locales.flatMap((lang) =>
@@ -33,7 +33,7 @@ const title = navLabel(lang, category);
     {calcs.map((c) => (
       <a class="card" href={`/${lang}/calculators/${c.slug}/`}>
         <span class="cat">{c.priority === 'mvp' ? t(lang, 'common.popular') : navLabel(lang, c.category)}</span>
-        <div class="name">{c.title}{c.live ? <span class="badge">live</span> : null}</div>
+        <div class="name">{calculatorTitle(lang, c.slug, c.title)}{c.live ? <span class="badge">live</span> : null}</div>
         <span class="desc">{c.live ? t(lang, 'cat.liveDesc') : t(lang, 'cat.plannedDesc')}</span>
       </a>
     ))}

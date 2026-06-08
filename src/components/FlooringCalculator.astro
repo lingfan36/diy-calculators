@@ -1,43 +1,54 @@
 ---
 // Interactive flooring calculator (laminate / vinyl plank / box-sold flooring).
 // Server-rendered markup, client-side math importing the shared pure function.
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = calculatorLabels(lang);
 ---
 
 <div class="calc" id="floor-calc">
   <div class="row">
-    <label>Room length (ft)
+    <label>{labels.roomLength}
       <input type="number" id="f-length" min="0" step="any" value="12" />
     </label>
-    <label>Room width (ft)
+    <label>{labels.roomWidth}
       <input type="number" id="f-width" min="0" step="any" value="10" />
     </label>
   </div>
   <div class="row">
-    <label>Coverage per box (ft²)
+    <label>{labels.coveragePerBox}
       <input type="number" id="f-cov" min="0" step="any" value="20" />
     </label>
-    <label>Waste
+    <label>{labels.waste}
       <select id="f-waste">
         <option value="5">5%</option>
         <option value="10" selected>10%</option>
         <option value="15">15%</option>
       </select>
     </label>
-    <label>Price / box ($, optional)
-      <input type="number" id="f-price" min="0" step="any" placeholder="e.g. 35" />
+    <label>{labels.priceBox}
+      <input type="number" id="f-price" min="0" step="any" placeholder={`${labels.example} 35`} />
     </label>
   </div>
-  <button id="f-go" type="button">Calculate</button>
+  <button id="f-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="f-result" aria-live="polite">
-    <p>You need <span class="big" id="f-boxes">0</span> boxes</p>
+    <p>{labels.youNeed} <span class="big" id="f-boxes">0</span> {labels.boxes}</p>
     <p id="f-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="f-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcFlooring } from '../lib/calc/flooring';
 
+  const labels = JSON.parse(document.getElementById('f-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -51,9 +62,9 @@
       pricePerBox: priceRaw ? parseFloat(priceRaw) : undefined,
     });
     byId('f-boxes').textContent = String(r.boxes);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('f-detail').textContent =
-      `${r.areaSqFt} ft² + waste = ${r.areaWithWaste} ft² → ${r.boxes} boxes${cost}`;
+      `${r.areaSqFt} ft² ${labels.plusWaste} ${r.areaWithWaste} ft² -> ${r.boxes} ${labels.boxes}${cost}`;
     document.getElementById('f-result')!.classList.remove('hidden');
   }
 

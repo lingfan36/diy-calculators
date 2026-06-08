@@ -2,53 +2,62 @@
 // Generic "area ÷ flat coverage" calculator (drywall sheets, roofing bundles,
 // siding squares, ...). Reuses the flooring pure function. The unit label is
 // rendered into the DOM so the client script can read it without define:vars.
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
 interface Props {
-  unitLabel?: string; // plural, e.g. "sheets"
+  unitLabel?: string; // plural, for example "sheets"
   defaultCoverage?: number; // ft² covered by one unit
   coverageLabel?: string;
+  lang?: Lang;
 }
 const {
   unitLabel = 'pieces',
   defaultCoverage = 32,
-  coverageLabel = 'Coverage per unit (ft²)',
+  coverageLabel,
+  lang = 'en',
 } = Astro.props;
+const labels = calculatorLabels(lang);
+const displayCoverageLabel = coverageLabel ?? labels.coveragePerUnit;
 ---
 
 <div class="calc" id="cov-calc">
   <div class="row">
-    <label>Length (ft)
+    <label>{labels.length}
       <input type="number" id="c-length" min="0" step="any" value="10" />
     </label>
-    <label>Width (ft)
+    <label>{labels.width}
       <input type="number" id="c-width" min="0" step="any" value="10" />
     </label>
   </div>
   <div class="row">
-    <label>{coverageLabel}
+    <label>{displayCoverageLabel}
       <input type="number" id="c-cov" min="0" step="any" value={defaultCoverage} />
     </label>
-    <label>Waste
+    <label>{labels.waste}
       <select id="c-waste">
         <option value="5">5%</option>
         <option value="10" selected>10%</option>
         <option value="15">15%</option>
       </select>
     </label>
-    <label>Price / unit ($, optional)
-      <input type="number" id="c-price" min="0" step="any" placeholder="e.g. 15" />
+    <label>{labels.priceUnit}
+      <input type="number" id="c-price" min="0" step="any" placeholder={`${labels.example} 15`} />
     </label>
   </div>
-  <button id="c-go" type="button">Calculate</button>
+  <button id="c-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="c-result" aria-live="polite">
-    <p>You need <span class="big" id="c-units">0</span> <span id="c-unit-label">{unitLabel}</span></p>
+    <p>{labels.youNeed} <span class="big" id="c-units">0</span> <span id="c-unit-label">{unitLabel}</span></p>
     <p id="c-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="c-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcFlooring } from '../lib/calc/flooring';
 
+  const labels = JSON.parse(document.getElementById('c-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -63,9 +72,9 @@ const {
       pricePerBox: priceRaw ? parseFloat(priceRaw) : undefined,
     });
     byId('c-units').textContent = String(r.boxes);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('c-detail').textContent =
-      `${r.areaSqFt} ft² + waste = ${r.areaWithWaste} ft² → ${r.boxes} ${label}${cost}`;
+      `${r.areaSqFt} ft² ${labels.plusWaste} ${r.areaWithWaste} ft² -> ${r.boxes} ${label}${cost}`;
     document.getElementById('c-result')!.classList.remove('hidden');
   }
 

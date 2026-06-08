@@ -1,39 +1,50 @@
 ---
 // Interactive board feet calculator. Server-rendered markup, client-side math
 // importing the same pure function the unit tests use.
+import { calculatorLabels, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = calculatorLabels(lang);
 ---
 
 <div class="calc" id="bf-calc">
   <div class="row">
-    <label>Thickness (in)
+    <label>{labels.thickness}
       <input type="number" id="b-thick" min="0" step="any" value="1" />
     </label>
-    <label>Width (in)
+    <label>{labels.boardWidth}
       <input type="number" id="b-width" min="0" step="any" value="6" />
     </label>
-    <label>Length (ft)
+    <label>{labels.boardLength}
       <input type="number" id="b-length" min="0" step="any" value="8" />
     </label>
   </div>
   <div class="row">
-    <label>Quantity (pieces)
+    <label>{labels.quantity}
       <input type="number" id="b-qty" min="1" step="1" value="1" />
     </label>
-    <label>Price / board foot ($, optional)
-      <input type="number" id="b-price" min="0" step="any" placeholder="e.g. 4.50" />
+    <label>{labels.priceBoardFoot}
+      <input type="number" id="b-price" min="0" step="any" placeholder={`${labels.example} 4.50`} />
     </label>
   </div>
-  <button id="b-go" type="button">Calculate</button>
+  <button id="b-go" type="button">{labels.calculate}</button>
 
   <div class="result hidden" id="b-result" aria-live="polite">
-    <p>Total <span class="big" id="b-total">0</span> board feet</p>
+    <p>{labels.total} <span class="big" id="b-total">0</span> {labels.boardFeet}</p>
     <p id="b-detail" class="muted"></p>
   </div>
 </div>
 
+<script type="application/json" id="b-labels" set:html={JSON.stringify(labels)} />
+
 <script>
   import { calcBoardFeet } from '../lib/calc/board-feet';
 
+  const labels = JSON.parse(document.getElementById('b-labels')?.textContent || '{}');
   const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
   const num = (id: string) => parseFloat(byId(id).value);
 
@@ -47,9 +58,9 @@
       pricePerBoardFoot: priceRaw ? parseFloat(priceRaw) : undefined,
     });
     byId('b-total').textContent = String(r.boardFeetTotal);
-    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    const cost = r.estCost !== null ? ` · ${labels.estCost} $${r.estCost}` : '';
     byId('b-detail').textContent =
-      `${r.boardFeetEach} bf each × ${r.quantity} = ${r.boardFeetTotal} bf${cost}`;
+      `${r.boardFeetEach} bf ${labels.each} x ${r.quantity} = ${r.boardFeetTotal} bf${cost}`;
     document.getElementById('b-result')!.classList.remove('hidden');
   }
 

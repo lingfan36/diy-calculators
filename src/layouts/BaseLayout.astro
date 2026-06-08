@@ -55,15 +55,26 @@ const alternates = locales.map((l) => ({
             <a href={`/${lang}/categories/${c.slug}/`}>{navLabel(lang, c.slug)}</a>
           ))}
         </nav>
-        <span class="langs">
+        <details class="lang-select">
+          <summary aria-label="Change language">
+            <span class="lang-current">{languages[lang]}</span>
+          </summary>
+          <div class="lang-menu" role="menu">
           {locales.map((l) =>
             l === lang ? (
-              <strong>{languages[l]}</strong>
+              <span class="lang-option is-active" role="menuitemcheckbox" aria-checked="true">
+                <span class="lang-check" aria-hidden="true"></span>
+                <span>{languages[l]}</span>
+              </span>
             ) : (
-              <a href={alternates.find((a) => a.lang === l)!.href}>{languages[l]}</a>
+              <a class="lang-option" role="menuitemcheckbox" aria-checked="false" href={alternates.find((a) => a.lang === l)!.href}>
+                <span class="lang-check" aria-hidden="true"></span>
+                <span>{languages[l]}</span>
+              </a>
             )
           )}
-        </span>
+          </div>
+        </details>
       </div>
     </header>
     <main class="container">
@@ -74,5 +85,21 @@ const alternates = locales.map((l) => ({
         <p class="muted">© {t(lang, 'site.title')} · {t(lang, 'site.footer')}</p>
       </div>
     </footer>
+    <script>
+      const languageSelector = document.querySelector('.lang-select');
+      if (languageSelector) {
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (target instanceof Node && !languageSelector.contains(target)) {
+            languageSelector.removeAttribute('open');
+          }
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            languageSelector.removeAttribute('open');
+          }
+        });
+      }
+    </script>
   </body>
 </html>
