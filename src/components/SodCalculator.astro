@@ -1,0 +1,61 @@
+---
+// Interactive sod calculator. Server-rendered markup, client-side math
+// importing the same pure function the unit tests use.
+---
+
+<div class="calc" id="sod-calc">
+  <div class="row">
+    <label>Length (ft)
+      <input type="number" id="o-length" min="0" step="any" value="30" />
+    </label>
+    <label>Width (ft)
+      <input type="number" id="o-width" min="0" step="any" value="20" />
+    </label>
+  </div>
+  <div class="row">
+    <label>Roll coverage (ft²)
+      <input type="number" id="o-roll" min="0" step="any" value="10" />
+    </label>
+    <label>Waste
+      <select id="o-waste">
+        <option value="5" selected>5%</option>
+        <option value="10">10%</option>
+      </select>
+    </label>
+    <label>Price / ft² ($, optional)
+      <input type="number" id="o-price" min="0" step="any" placeholder="e.g. 0.45" />
+    </label>
+  </div>
+  <button id="o-go" type="button">Calculate</button>
+
+  <div class="result hidden" id="o-result" aria-live="polite">
+    <p>You need <span class="big" id="o-rolls">0</span> rolls</p>
+    <p id="o-detail" class="muted"></p>
+  </div>
+</div>
+
+<script>
+  import { calcSod } from '../lib/calc/sod';
+
+  const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (id: string) => parseFloat(byId(id).value);
+
+  function run() {
+    const priceRaw = byId('o-price').value;
+    const r = calcSod({
+      length: num('o-length'),
+      width: num('o-width'),
+      rollCoverage: num('o-roll'),
+      wastePercent: parseFloat(byId('o-waste').value),
+      pricePerSqFt: priceRaw ? parseFloat(priceRaw) : undefined,
+    });
+    byId('o-rolls').textContent = String(r.rolls);
+    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    byId('o-detail').textContent =
+      `${r.areaWithWaste} ft² (with waste) → ${r.rolls} rolls or ${r.pallets} pallets${cost}`;
+    document.getElementById('o-result')!.classList.remove('hidden');
+  }
+
+  document.getElementById('o-go')!.addEventListener('click', run);
+  run();
+</script>

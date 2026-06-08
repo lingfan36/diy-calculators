@@ -1,0 +1,66 @@
+---
+// Interactive decking board calculator. Server-rendered markup, client-side
+// math importing the same pure function the unit tests use.
+---
+
+<div class="calc" id="deck-calc">
+  <div class="row">
+    <label>Deck length (ft)
+      <input type="number" id="d-length" min="0" step="any" value="16" />
+    </label>
+    <label>Deck width (ft)
+      <input type="number" id="d-width" min="0" step="any" value="12" />
+    </label>
+  </div>
+  <div class="row">
+    <label>Board width (in)
+      <input type="number" id="d-bwid" min="0" step="any" value="5.5" />
+    </label>
+    <label>Board length (ft)
+      <input type="number" id="d-blen" min="0" step="any" value="8" />
+    </label>
+    <label>Waste
+      <select id="d-waste">
+        <option value="5">5%</option>
+        <option value="10" selected>10%</option>
+        <option value="15">15%</option>
+      </select>
+    </label>
+    <label>Price / board ($, optional)
+      <input type="number" id="d-price" min="0" step="any" placeholder="e.g. 22" />
+    </label>
+  </div>
+  <button id="d-go" type="button">Calculate</button>
+
+  <div class="result hidden" id="d-result" aria-live="polite">
+    <p>You need <span class="big" id="d-boards">0</span> boards</p>
+    <p id="d-detail" class="muted"></p>
+  </div>
+</div>
+
+<script>
+  import { calcDecking } from '../lib/calc/decking';
+
+  const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (id: string) => parseFloat(byId(id).value);
+
+  function run() {
+    const priceRaw = byId('d-price').value;
+    const r = calcDecking({
+      length: num('d-length'),
+      width: num('d-width'),
+      boardWidthInches: num('d-bwid'),
+      boardLengthFeet: num('d-blen'),
+      wastePercent: parseFloat(byId('d-waste').value),
+      pricePerBoard: priceRaw ? parseFloat(priceRaw) : undefined,
+    });
+    byId('d-boards').textContent = String(r.boards);
+    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    byId('d-detail').textContent =
+      `${r.deckAreaSqFt} ft² · ${r.boardCoverageSqFt} ft²/board → ${r.boards} boards${cost}`;
+    document.getElementById('d-result')!.classList.remove('hidden');
+  }
+
+  document.getElementById('d-go')!.addEventListener('click', run);
+  run();
+</script>

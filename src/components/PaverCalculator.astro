@@ -1,0 +1,66 @@
+---
+// Interactive paver calculator. Server-rendered markup, client-side math
+// importing the same pure function the unit tests use.
+---
+
+<div class="calc" id="paver-calc">
+  <div class="row">
+    <label>Patio length (ft)
+      <input type="number" id="v-length" min="0" step="any" value="12" />
+    </label>
+    <label>Patio width (ft)
+      <input type="number" id="v-width" min="0" step="any" value="10" />
+    </label>
+  </div>
+  <div class="row">
+    <label>Paver length (in)
+      <input type="number" id="v-plen" min="0" step="any" value="12" />
+    </label>
+    <label>Paver width (in)
+      <input type="number" id="v-pwid" min="0" step="any" value="12" />
+    </label>
+    <label>Waste
+      <select id="v-waste">
+        <option value="5">5%</option>
+        <option value="10" selected>10%</option>
+        <option value="15">15%</option>
+      </select>
+    </label>
+    <label>Price / paver ($, optional)
+      <input type="number" id="v-price" min="0" step="any" placeholder="e.g. 2.50" />
+    </label>
+  </div>
+  <button id="v-go" type="button">Calculate</button>
+
+  <div class="result hidden" id="v-result" aria-live="polite">
+    <p>You need <span class="big" id="v-pavers">0</span> pavers</p>
+    <p id="v-detail" class="muted"></p>
+  </div>
+</div>
+
+<script>
+  import { calcPaver } from '../lib/calc/paver';
+
+  const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (id: string) => parseFloat(byId(id).value);
+
+  function run() {
+    const priceRaw = byId('v-price').value;
+    const r = calcPaver({
+      length: num('v-length'),
+      width: num('v-width'),
+      paverLengthInches: num('v-plen'),
+      paverWidthInches: num('v-pwid'),
+      wastePercent: parseFloat(byId('v-waste').value),
+      pricePerPaver: priceRaw ? parseFloat(priceRaw) : undefined,
+    });
+    byId('v-pavers').textContent = String(r.pavers);
+    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    byId('v-detail').textContent =
+      `${r.areaSqFt} ft² · ${r.paverAreaSqFt} ft²/paver → ${r.pavers} pavers${cost}`;
+    document.getElementById('v-result')!.classList.remove('hidden');
+  }
+
+  document.getElementById('v-go')!.addEventListener('click', run);
+  run();
+</script>
