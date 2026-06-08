@@ -148,6 +148,20 @@ const faqItems = [
     <p>{t(lang, 'calc.orderGuide')}</p>
   )}
 
+  {guide?.scenarios && guide.scenarios.length > 0 && (
+    <Fragment>
+      <h2>{t(lang, 'calc.quickAnswers')}</h2>
+      <dl class="scenario-list">
+        {guide.scenarios.map((s) => (
+          <Fragment>
+            <dt>{s.q}</dt>
+            <dd>{s.a}</dd>
+          </Fragment>
+        ))}
+      </dl>
+    </Fragment>
+  )}
+
   {related.length > 0 && (
     <Fragment>
       <h2>{t(lang, 'calc.related')}</h2>

@@ -51,6 +51,7 @@ type UIKey =
   | 'calc.howto'
   | 'calc.order'
   | 'calc.related'
+  | 'calc.quickAnswers'
   | 'calc.comingSoon'
   | 'calc.disclaimer'
   | 'cat.lead'
@@ -114,6 +115,7 @@ export const ui: Record<Lang, Dict> = {
     'calc.howto': 'How to calculate',
     'calc.order': 'How much should you order?',
     'calc.related': 'Related calculators',
+    'calc.quickAnswers': 'Quick answers for common sizes',
     'calc.comingSoon':
       'Interactive calculator coming soon. The guide below shows the planning method in the meantime.',
     'calc.disclaimer':
@@ -181,6 +183,7 @@ export const ui: Record<Lang, Dict> = {
     'calc.howto': 'Cómo calcular',
     'calc.order': '¿Cuánto deberías pedir?',
     'calc.related': 'Calculadoras relacionadas',
+    'calc.quickAnswers': 'Respuestas rápidas para tamaños comunes',
     'calc.comingSoon':
       'Calculadora interactiva próximamente. Mientras tanto, la guía siguiente explica el método de planificación.',
     'calc.disclaimer':
@@ -248,6 +251,7 @@ export const ui: Record<Lang, Dict> = {
     'calc.howto': 'So wird berechnet',
     'calc.order': 'Wie viel solltest du bestellen?',
     'calc.related': 'Verwandte Rechner',
+    'calc.quickAnswers': 'Schnelle Antworten für gängige Größen',
     'calc.comingSoon':
       'Interaktiver Rechner kommt bald. Die Anleitung unten zeigt vorerst die Planungsmethode.',
     'calc.disclaimer':
@@ -314,6 +318,7 @@ export const ui: Record<Lang, Dict> = {
     'calc.howto': '如何计算',
     'calc.order': '应该订购多少?',
     'calc.related': '相关计算器',
+    'calc.quickAnswers': '常见尺寸快速参考',
     'calc.comingSoon': '交互计算器即将上线。在此之前,下方指南介绍计算方法。',
     'calc.disclaimer': '这些估算仅供规划参考,会随产品、铺法、损耗和现场情况变化。下单前请确认用量。',
     'cat.lead': '在下方选择一个计算器。',

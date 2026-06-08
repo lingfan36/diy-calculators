@@ -791,6 +791,28 @@ p {
   font-family: var(--font-display);
 }
 
+.scenario-list {
+  margin: 0.6rem 0 0;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--line, #e2e6e0);
+}
+
+.scenario-list dt {
+  padding: 0.7rem 0 0.15rem;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.scenario-list dd {
+  margin: 0;
+  padding: 0 0 0.7rem;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--line, #e2e6e0);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---------- soft CTA ---------- */
 .cta-block {
   display: grid;
