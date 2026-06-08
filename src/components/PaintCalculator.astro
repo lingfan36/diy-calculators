@@ -1,0 +1,67 @@
+---
+// Interactive interior paint calculator. Server-rendered markup, client-side
+// math importing the same pure function the unit tests use.
+---
+
+<div class="calc" id="paint-calc">
+  <div class="row">
+    <label>Room length (ft)
+      <input type="number" id="p-length" min="0" step="any" value="12" />
+    </label>
+    <label>Room width (ft)
+      <input type="number" id="p-width" min="0" step="any" value="10" />
+    </label>
+    <label>Ceiling height (ft)
+      <input type="number" id="p-height" min="0" step="any" value="8" />
+    </label>
+  </div>
+  <div class="row">
+    <label>Coats
+      <select id="p-coats">
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+      </select>
+    </label>
+    <label>Doors/windows (ft², optional)
+      <input type="number" id="p-open" min="0" step="any" placeholder="e.g. 40" />
+    </label>
+    <label>Price / gallon ($, optional)
+      <input type="number" id="p-price" min="0" step="any" placeholder="e.g. 35" />
+    </label>
+  </div>
+  <button id="p-go" type="button">Calculate</button>
+
+  <div class="result hidden" id="p-result" aria-live="polite">
+    <p>You need <span class="big" id="p-gal">0</span> gallons</p>
+    <p id="p-detail" class="muted"></p>
+  </div>
+</div>
+
+<script>
+  import { calcPaint } from '../lib/calc/paint';
+
+  const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (id: string) => parseFloat(byId(id).value);
+
+  function run() {
+    const openRaw = byId('p-open').value;
+    const priceRaw = byId('p-price').value;
+    const r = calcPaint({
+      length: num('p-length'),
+      width: num('p-width'),
+      height: num('p-height'),
+      coats: parseFloat(byId('p-coats').value),
+      openingsSqFt: openRaw ? parseFloat(openRaw) : 0,
+      pricePerGallon: priceRaw ? parseFloat(priceRaw) : undefined,
+    });
+    byId('p-gal').textContent = String(r.gallons);
+    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    byId('p-detail').textContent =
+      `${r.wallAreaSqFt} ft² walls × ${r.coats} coats = ${r.gallonsExact} gal → buy ${r.gallons}${cost}`;
+    document.getElementById('p-result')!.classList.remove('hidden');
+  }
+
+  document.getElementById('p-go')!.addEventListener('click', run);
+  run();
+</script>

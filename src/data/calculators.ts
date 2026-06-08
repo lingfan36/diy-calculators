@@ -36,8 +36,8 @@ export interface Calculator {
 
 export const CALCULATORS: Calculator[] = [
   // --- Flooring ---
-  { slug: 'laminate-flooring-calculator', title: 'Laminate Flooring Calculator', category: 'flooring', volume: 'high', priority: 'mvp' },
-  { slug: 'vinyl-plank-flooring-calculator', title: 'Vinyl Plank Flooring Calculator', category: 'flooring', volume: 'high', priority: 'mvp' },
+  { slug: 'laminate-flooring-calculator', title: 'Laminate Flooring Calculator', category: 'flooring', volume: 'high', priority: 'mvp', live: true },
+  { slug: 'vinyl-plank-flooring-calculator', title: 'Vinyl Plank Flooring Calculator', category: 'flooring', volume: 'high', priority: 'mvp', live: true },
   { slug: 'hardwood-flooring-calculator', title: 'Hardwood Flooring Calculator', category: 'flooring', volume: 'medium', priority: 'extended' },
   { slug: 'engineered-wood-flooring-calculator', title: 'Engineered Wood Flooring Calculator', category: 'flooring', volume: 'medium', priority: 'extended' },
   { slug: 'floor-tile-calculator', title: 'Floor Tile Calculator', category: 'flooring', volume: 'high', priority: 'extended' },
@@ -48,7 +48,7 @@ export const CALCULATORS: Calculator[] = [
   { slug: 'stair-tread-flooring-calculator', title: 'Stair Tread Flooring Calculator', category: 'flooring', volume: 'low', priority: 'extended' },
 
   // --- Paint & Walls ---
-  { slug: 'interior-paint-calculator', title: 'Interior Paint Calculator', category: 'paint', volume: 'high', priority: 'mvp' },
+  { slug: 'interior-paint-calculator', title: 'Interior Paint Calculator', category: 'paint', volume: 'high', priority: 'mvp', live: true },
   { slug: 'exterior-paint-calculator', title: 'Exterior Paint Calculator', category: 'paint', volume: 'medium', priority: 'extended' },
   { slug: 'wallpaper-calculator', title: 'Wallpaper Calculator', category: 'paint', volume: 'medium', priority: 'extended' },
   { slug: 'drywall-calculator', title: 'Drywall Calculator', category: 'paint', volume: 'high', priority: 'extended' },
@@ -64,7 +64,7 @@ export const CALCULATORS: Calculator[] = [
   { slug: 'concrete-footing-calculator', title: 'Concrete Footing Calculator', category: 'structural', volume: 'medium', priority: 'extended' },
   { slug: 'concrete-column-calculator', title: 'Concrete Column Calculator', category: 'structural', volume: 'medium', priority: 'extended' },
   { slug: 'concrete-stairs-calculator', title: 'Concrete Stairs Calculator', category: 'structural', volume: 'low', priority: 'extended' },
-  { slug: 'board-feet-lumber-calculator', title: 'Board Feet Lumber Calculator', category: 'structural', volume: 'high', priority: 'mvp' },
+  { slug: 'board-feet-lumber-calculator', title: 'Board Feet Lumber Calculator', category: 'structural', volume: 'high', priority: 'mvp', live: true },
   { slug: 'wall-framing-stud-calculator', title: 'Wall Framing Stud Calculator', category: 'structural', volume: 'medium', priority: 'extended' },
   { slug: 'rebar-calculator', title: 'Rebar Calculator', category: 'structural', volume: 'medium', priority: 'extended' },
   { slug: 'insulation-calculator', title: 'Insulation Calculator', category: 'structural', volume: 'medium', priority: 'extended' },

@@ -1,0 +1,62 @@
+---
+// Interactive flooring calculator (laminate / vinyl plank / box-sold flooring).
+// Server-rendered markup, client-side math importing the shared pure function.
+---
+
+<div class="calc" id="floor-calc">
+  <div class="row">
+    <label>Room length (ft)
+      <input type="number" id="f-length" min="0" step="any" value="12" />
+    </label>
+    <label>Room width (ft)
+      <input type="number" id="f-width" min="0" step="any" value="10" />
+    </label>
+  </div>
+  <div class="row">
+    <label>Coverage per box (ft²)
+      <input type="number" id="f-cov" min="0" step="any" value="20" />
+    </label>
+    <label>Waste
+      <select id="f-waste">
+        <option value="5">5%</option>
+        <option value="10" selected>10%</option>
+        <option value="15">15%</option>
+      </select>
+    </label>
+    <label>Price / box ($, optional)
+      <input type="number" id="f-price" min="0" step="any" placeholder="e.g. 35" />
+    </label>
+  </div>
+  <button id="f-go" type="button">Calculate</button>
+
+  <div class="result hidden" id="f-result" aria-live="polite">
+    <p>You need <span class="big" id="f-boxes">0</span> boxes</p>
+    <p id="f-detail" class="muted"></p>
+  </div>
+</div>
+
+<script>
+  import { calcFlooring } from '../lib/calc/flooring';
+
+  const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (id: string) => parseFloat(byId(id).value);
+
+  function run() {
+    const priceRaw = byId('f-price').value;
+    const r = calcFlooring({
+      length: num('f-length'),
+      width: num('f-width'),
+      boxCoverage: num('f-cov'),
+      wastePercent: parseFloat(byId('f-waste').value),
+      pricePerBox: priceRaw ? parseFloat(priceRaw) : undefined,
+    });
+    byId('f-boxes').textContent = String(r.boxes);
+    const cost = r.estCost !== null ? ` · est. cost $${r.estCost}` : '';
+    byId('f-detail').textContent =
+      `${r.areaSqFt} ft² + waste = ${r.areaWithWaste} ft² → ${r.boxes} boxes${cost}`;
+    document.getElementById('f-result')!.classList.remove('hidden');
+  }
+
+  document.getElementById('f-go')!.addEventListener('click', run);
+  run();
+</script>

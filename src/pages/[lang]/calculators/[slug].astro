@@ -4,6 +4,9 @@ import Faq from '../../../components/Faq.astro';
 import MulchCalculator from '../../../components/MulchCalculator.astro';
 import GravelCalculator from '../../../components/GravelCalculator.astro';
 import ConcreteSlabCalculator from '../../../components/ConcreteSlabCalculator.astro';
+import FlooringCalculator from '../../../components/FlooringCalculator.astro';
+import PaintCalculator from '../../../components/PaintCalculator.astro';
+import BoardFeetCalculator from '../../../components/BoardFeetCalculator.astro';
 import {
   CALCULATORS,
   getCalculator,
@@ -72,6 +75,12 @@ const faqItems = [
     <GravelCalculator />
   ) : calc.slug === 'concrete-slab-calculator' ? (
     <ConcreteSlabCalculator />
+  ) : calc.slug === 'laminate-flooring-calculator' || calc.slug === 'vinyl-plank-flooring-calculator' ? (
+    <FlooringCalculator />
+  ) : calc.slug === 'interior-paint-calculator' ? (
+    <PaintCalculator />
+  ) : calc.slug === 'board-feet-lumber-calculator' ? (
+    <BoardFeetCalculator />
   ) : (
     <div class="calc"><p class="muted">⚙️ {t(lang, 'calc.comingSoon')}</p></div>
   )}
