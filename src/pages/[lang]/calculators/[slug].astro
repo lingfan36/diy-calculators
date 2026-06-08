@@ -67,12 +67,15 @@ const faqItems = [
   path={`/calculators/${calc.slug}/`}
   jsonLd={[webApp, breadcrumb]}
 >
-  <p class="muted">
-    <a href={`/${lang}/`}>{t(lang, 'common.home')}</a> ›
+  <p class="breadcrumb">
+    <a href={`/${lang}/`}>{t(lang, 'common.home')}</a><span>/</span>
     <a href={`/${lang}/categories/${calc.category}/`}>{navLabel(lang, calc.category)}</a>
   </p>
-  <h1>{calc.title}</h1>
-  <p class="lead">{t(lang, 'calc.lead')}</p>
+  <section class="content-narrow">
+    <span class="eyebrow">{navLabel(lang, calc.category)}</span>
+    <h1>{calc.title}</h1>
+    <p class="lead">{t(lang, 'calc.lead')}</p>
+  </section>
 
   {calc.slug === 'mulch-calculator' ? (
     <MulchCalculator />
@@ -115,18 +118,24 @@ const faqItems = [
   ) : calc.slug === 'siding-calculator' ? (
     <CoverageCalculator unitLabel="squares" defaultCoverage={100} coverageLabel="Coverage per square (ft²)" />
   ) : (
-    <div class="calc"><p class="muted">⚙️ {t(lang, 'calc.comingSoon')}</p></div>
+    <div class="calc"><p class="muted">{t(lang, 'calc.comingSoon')}</p></div>
   )}
 
   <h2>{t(lang, 'calc.howto')} · {noun}</h2>
-  <p>
-    Measure the length and width of your area in feet and multiply them to get the square footage,
-    then factor in the depth or coverage rate.
-    <em> (Placeholder — localized 1,200–1,800 word guide goes here per the content template.)</em>
-  </p>
+  <div class="guide-panel">
+    <p>
+      Start with the measured area, then apply the product coverage, depth, thickness, or waste
+      allowance that matches the material. The calculator above keeps the core math visible so you
+      can compare the result against the package size or supplier quote.
+    </p>
+  </div>
 
   <h2>{t(lang, 'calc.order')}</h2>
-  <p>Always add a waste margin so you don't run short mid-project.</p>
+  <p>
+    For straight layouts, a small waste allowance is usually enough. Increase the allowance for
+    diagonal patterns, irregular rooms, fragile materials, or jobs where matching a future batch
+    would be difficult.
+  </p>
 
   {related.length > 0 && (
     <Fragment>

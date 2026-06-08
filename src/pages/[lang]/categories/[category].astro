@@ -13,19 +13,28 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const category = Astro.params.category as Category;
 const calcs = byCategory(category);
+const liveCount = calcs.filter((c) => c.live).length;
 const title = navLabel(lang, category);
 ---
 
 <BaseLayout title={title} description={t(lang, 'cat.lead')} lang={lang} path={`/categories/${category}/`}>
-  <p class="muted"><a href={`/${lang}/`}>{t(lang, 'common.home')}</a> › {title}</p>
-  <h1>{title}</h1>
-  <p class="lead">{t(lang, 'cat.lead')}</p>
+  <p class="breadcrumb"><a href={`/${lang}/`}>{t(lang, 'common.home')}</a><span>/</span><span>{title}</span></p>
+  <section class="content-narrow">
+    <span class="eyebrow">{t(lang, 'cat.eyebrow')}</span>
+    <h1>{title}</h1>
+    <p class="lead">{t(lang, 'cat.lead')}</p>
+    <div class="proof-row">
+      <span class="proof">{calcs.length} {t(lang, 'index.calculatorsCount')}</span>
+      <span class="proof">{liveCount} {t(lang, 'index.liveToolsCount')}</span>
+    </div>
+  </section>
 
   <div class="grid">
     {calcs.map((c) => (
       <a class="card" href={`/${lang}/calculators/${c.slug}/`}>
         <span class="cat">{c.priority === 'mvp' ? t(lang, 'common.popular') : navLabel(lang, c.category)}</span>
         <div class="name">{c.title}{c.live ? <span class="badge">live</span> : null}</div>
+        <span class="desc">{c.live ? t(lang, 'cat.liveDesc') : t(lang, 'cat.plannedDesc')}</span>
       </a>
     ))}
   </div>

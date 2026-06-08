@@ -9,30 +9,94 @@ export function getStaticPaths() {
 
 const lang = Astro.params.lang as Lang;
 const mvp = CALCULATORS.filter((c) => c.priority === 'mvp');
+const liveCount = CALCULATORS.filter((c) => c.live).length;
+const categoryStats = CATEGORIES.map((c) => ({
+  ...c,
+  total: CALCULATORS.filter((calc) => calc.category === c.slug).length,
+  live: CALCULATORS.filter((calc) => calc.category === c.slug && calc.live).length,
+}));
 const title = t(lang, 'site.title');
 const description = t(lang, 'index.lead');
 ---
 
 <BaseLayout title={title} description={description} lang={lang} path="/">
-  <h1>{title}</h1>
-  <p class="lead">{description}</p>
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">{t(lang, 'index.eyebrow')}</span>
+      <h1>{title}</h1>
+      <p class="lead">{description}</p>
+      <div class="hero-actions">
+        <a class="button" href={`/${lang}/calculators/${mvp[0].slug}/`}>{t(lang, 'index.start')}</a>
+        <a class="button secondary" href={`/${lang}/categories/${CATEGORIES[0].slug}/`}>{t(lang, 'index.browseCta')}</a>
+      </div>
+      <div class="proof-row" aria-label="Site highlights">
+        <span class="proof">{CALCULATORS.length} {t(lang, 'index.calculatorsCount')}</span>
+        <span class="proof">{liveCount} {t(lang, 'index.liveToolsCount')}</span>
+        <span class="proof">{t(lang, 'index.noSignup')}</span>
+      </div>
+    </div>
 
-  <h2>{t(lang, 'index.popular')}</h2>
+    <aside class="hero-panel" aria-label="Example calculator result">
+      <div class="hero-panel-header">
+        <div>
+          <span class="eyebrow">{t(lang, 'index.example')}</span>
+          <div class="hero-panel-title">{t(lang, 'index.flooringEstimate')}</div>
+        </div>
+        <span class="pill">{t(lang, 'index.liveMath')}</span>
+      </div>
+      <div class="hero-panel-body">
+        <div class="mini-form">
+          <div class="mini-row">
+            <span class="mini-label">{t(lang, 'index.roomSize')}</span>
+            <span class="mini-value">12 x 10 ft</span>
+          </div>
+          <div class="mini-row">
+            <span class="mini-label">{t(lang, 'index.coveragePerBox')}</span>
+            <span class="mini-value">20 ft2</span>
+          </div>
+          <div class="mini-row">
+            <span class="mini-label">{t(lang, 'index.wasteAllowance')}</span>
+            <span class="mini-value">10%</span>
+          </div>
+        </div>
+        <div class="mini-result">
+          {t(lang, 'index.orderAbout')}
+          <strong>7 boxes</strong>
+          132 ft2 {t(lang, 'index.includingWaste')}
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="section-head">
+    <div>
+      <span class="eyebrow">{t(lang, 'common.popular')}</span>
+      <h2>{t(lang, 'index.popular')}</h2>
+    </div>
+    <span class="pill">{t(lang, 'index.fastEstimates')}</span>
+  </div>
   <div class="grid">
     {mvp.map((c) => (
       <a class="card" href={`/${lang}/calculators/${c.slug}/`}>
         <span class="cat">{navLabel(lang, c.category)}</span>
         <div class="name">{c.title}{c.live ? <span class="badge">live</span> : null}</div>
+        <span class="desc">{t(lang, 'index.cardDesc')}</span>
       </a>
     ))}
   </div>
 
-  <h2>{t(lang, 'index.browse')}</h2>
+  <div class="section-head">
+    <div>
+      <span class="eyebrow">{t(lang, 'index.library')}</span>
+      <h2>{t(lang, 'index.browse')}</h2>
+    </div>
+  </div>
   <div class="grid">
-    {CATEGORIES.map((c) => (
+    {categoryStats.map((c) => (
       <a class="card" href={`/${lang}/categories/${c.slug}/`}>
         <div class="name">{navLabel(lang, c.slug)}</div>
-        <span class="cat">{c.blurb}</span>
+        <span class="desc">{c.blurb}</span>
+        <span class="cat">{c.total} {t(lang, 'index.categoryStats')} · {c.live} {t(lang, 'index.liveShort')}</span>
       </a>
     ))}
   </div>

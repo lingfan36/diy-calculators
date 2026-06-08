@@ -109,5 +109,5 @@ export function categoryInfo(cat: Category): CategoryInfo {
 }
 
 export function defaultMetaDescription(c: Calculator): string {
-  return `Free ${c.title.toLowerCase()}: estimate how much material you need and the cost in seconds. Enter your area and depth — no sign-up.`;
+  return `Free ${c.title.toLowerCase()}: estimate material quantity and rough cost in seconds. Enter measurements, coverage, and waste settings.`;
 }
