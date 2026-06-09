@@ -2,7 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { CATEGORIES, byCategory } from '../../../data/calculators';
 import type { Category } from '../../../data/calculators';
-import { calculatorTitle, locales, t, navLabel, type Lang } from '../../../i18n/ui';
+import { categoryBlurb, calculatorTitle, locales, t, navLabel, type Lang } from '../../../i18n/ui';
 
 export function getStaticPaths() {
   return locales.flatMap((lang) =>
@@ -13,16 +13,31 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const category = Astro.params.category as Category;
 const calcs = byCategory(category);
-const liveCount = calcs.filter((c) => c.live).length;
+const liveCalcs = calcs.filter((c) => c.live);
+const plannedCalcs = calcs.filter((c) => !c.live);
+const liveCount = liveCalcs.length;
 const title = navLabel(lang, category);
+const description = categoryBlurb(lang, category, t(lang, 'cat.lead'));
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: title,
+  inLanguage: lang,
+  itemListElement: liveCalcs.map((c, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: calculatorTitle(lang, c.slug, c.title),
+    url: new URL(`/${lang}/calculators/${c.slug}/`, Astro.site).href,
+  })),
+};
 ---
 
-<BaseLayout title={title} description={t(lang, 'cat.lead')} lang={lang} path={`/categories/${category}/`}>
+<BaseLayout title={title} description={description} lang={lang} path={`/categories/${category}/`} jsonLd={[itemListSchema]}>
   <p class="breadcrumb"><a href={`/${lang}/`}>{t(lang, 'common.home')}</a><span>/</span><span>{title}</span></p>
   <section class="content-narrow">
     <span class="eyebrow">{t(lang, 'cat.eyebrow')}</span>
     <h1>{title}</h1>
-    <p class="lead">{t(lang, 'cat.lead')}</p>
+    <p class="lead">{description}</p>
     <div class="proof-row">
       <span class="proof">{calcs.length} {t(lang, 'index.calculatorsCount')}</span>
       <span class="proof">{liveCount} {t(lang, 'index.liveToolsCount')}</span>
@@ -30,12 +45,19 @@ const title = navLabel(lang, category);
   </section>
 
   <div class="grid">
-    {calcs.map((c) => (
+    {liveCalcs.map((c) => (
       <a class="card" href={`/${lang}/calculators/${c.slug}/`}>
         <span class="cat">{c.priority === 'mvp' ? t(lang, 'common.popular') : navLabel(lang, c.category)}</span>
-        <div class="name">{calculatorTitle(lang, c.slug, c.title)}{c.live ? <span class="badge">live</span> : null}</div>
-        <span class="desc">{c.live ? t(lang, 'cat.liveDesc') : t(lang, 'cat.plannedDesc')}</span>
+        <div class="name">{calculatorTitle(lang, c.slug, c.title)}<span class="badge">live</span></div>
+        <span class="desc">{t(lang, 'cat.liveDesc')}</span>
       </a>
+    ))}
+    {plannedCalcs.map((c) => (
+      <article class="card card-muted" aria-disabled="true">
+        <span class="cat">{navLabel(lang, c.category)}</span>
+        <div class="name">{calculatorTitle(lang, c.slug, c.title)}</div>
+        <span class="desc">{t(lang, 'cat.plannedDesc')}</span>
+      </article>
     ))}
   </div>
 </BaseLayout>

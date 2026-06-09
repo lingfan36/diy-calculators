@@ -25,6 +25,8 @@ type UIKey =
   | 'nav.roofing'
   | 'common.home'
   | 'common.popular'
+  | 'common.methodology'
+  | 'common.lastReviewed'
   | 'index.eyebrow'
   | 'index.lead'
   | 'index.popular'
@@ -54,6 +56,16 @@ type UIKey =
   | 'calc.quickAnswers'
   | 'calc.comingSoon'
   | 'calc.disclaimer'
+  | 'calc.answerFirst'
+  | 'calc.answerBody'
+  | 'calc.estimateIncludes'
+  | 'calc.includesArea'
+  | 'calc.includesWaste'
+  | 'calc.includesRounding'
+  | 'calc.beforeBuying'
+  | 'calc.confirmCoverage'
+  | 'calc.confirmBatch'
+  | 'calc.confirmConditions'
   | 'cat.lead'
   | 'cat.eyebrow'
   | 'cat.summary'
@@ -73,7 +85,8 @@ type UIKey =
   | 'cta.subscribeTitle'
   | 'cta.subscribeDesc'
   | 'cta.subscribePlaceholder'
-  | 'cta.subscribeButton';
+  | 'cta.subscribeButton'
+  | 'cta.subscribeThanks';
 
 type Dict = Record<UIKey, string>;
 
@@ -88,6 +101,8 @@ export const ui: Record<Lang, Dict> = {
     'nav.roofing': 'Roofing & Exterior',
     'common.home': 'Home',
     'common.popular': 'Popular',
+    'common.methodology': 'Methodology',
+    'common.lastReviewed': 'Last reviewed',
     'index.eyebrow': 'Project quantity tools',
     'index.lead':
       'Free, fast calculators for flooring, paint, concrete, landscaping and roofing jobs. Turn measurements into order quantities and rough costs before you buy.',
@@ -120,6 +135,17 @@ export const ui: Record<Lang, Dict> = {
       'Interactive calculator coming soon. The guide below shows the planning method in the meantime.',
     'calc.disclaimer':
       'These estimates are for planning only and may vary by product, layout, waste, and site conditions. Confirm quantities before ordering.',
+    'calc.answerFirst': 'Answer first',
+    'calc.answerBody':
+      'Use the calculator result as a shopping estimate, then confirm product coverage, waste, delivery minimums, and site conditions before ordering.',
+    'calc.estimateIncludes': 'What this estimate includes',
+    'calc.includesArea': 'Measured area or volume from the dimensions you enter.',
+    'calc.includesWaste': 'The waste allowance or coverage setting selected on the page.',
+    'calc.includesRounding': 'Rounded purchase units where the material is sold by boxes, rolls, bundles, bags, or pieces.',
+    'calc.beforeBuying': 'Confirm before you buy',
+    'calc.confirmCoverage': 'The exact coverage printed on the package or supplier quote.',
+    'calc.confirmBatch': 'Batch, color, grade, thickness, or product-specific installation requirements.',
+    'calc.confirmConditions': 'Local delivery minimums, subfloor/site condition, slope, compaction, or code requirements.',
     'cat.lead': 'Pick a calculator below.',
     'cat.eyebrow': 'Category',
     'cat.summary': 'tools are listed here, including interactive calculators.',
@@ -144,6 +170,7 @@ export const ui: Record<Lang, Dict> = {
     'cta.subscribeDesc': 'An occasional note when we add tools. No spam, unsubscribe anytime.',
     'cta.subscribePlaceholder': 'you@email.com',
     'cta.subscribeButton': 'Subscribe',
+    'cta.subscribeThanks': 'Thanks. Email capture goes live with the newsletter service.',
   },
   es: {
     'site.title': 'Calculadoras de Materiales DIY',
@@ -155,6 +182,8 @@ export const ui: Record<Lang, Dict> = {
     'nav.roofing': 'Tejados y Exterior',
     'common.home': 'Inicio',
     'common.popular': 'Popular',
+    'common.methodology': 'Metodología',
+    'common.lastReviewed': 'Revisado',
     'index.eyebrow': 'Herramientas de cantidad',
     'index.lead':
       'Calculadoras gratuitas y rápidas para suelos, pintura, hormigón, jardinería y tejados. Convierte medidas en cantidades de compra y costes aproximados.',
@@ -188,6 +217,17 @@ export const ui: Record<Lang, Dict> = {
       'Calculadora interactiva próximamente. Mientras tanto, la guía siguiente explica el método de planificación.',
     'calc.disclaimer':
       'Estas estimaciones son solo para planificar y pueden variar según producto, diseño, desperdicio y condiciones. Confirma las cantidades antes de comprar.',
+    'calc.answerFirst': 'Respuesta rápida',
+    'calc.answerBody':
+      'Usa el resultado como estimación de compra y confirma cobertura, desperdicio, mínimos de entrega y condiciones del sitio antes de pedir.',
+    'calc.estimateIncludes': 'Qué incluye esta estimación',
+    'calc.includesArea': 'Área o volumen medido a partir de las dimensiones introducidas.',
+    'calc.includesWaste': 'El margen de desperdicio o cobertura seleccionado en la página.',
+    'calc.includesRounding': 'Unidades redondeadas cuando el material se vende por cajas, rollos, paquetes, bolsas o piezas.',
+    'calc.beforeBuying': 'Confirma antes de comprar',
+    'calc.confirmCoverage': 'La cobertura exacta impresa en el paquete o presupuesto del proveedor.',
+    'calc.confirmBatch': 'Lote, color, grado, grosor o requisitos de instalación del producto.',
+    'calc.confirmConditions': 'Mínimos de entrega, estado de la base, pendiente, compactación o requisitos normativos.',
     'cat.lead': 'Elige una calculadora a continuación.',
     'cat.eyebrow': 'Categoría',
     'cat.summary': 'herramientas en esta sección, incluidas calculadoras interactivas.',
@@ -212,6 +252,7 @@ export const ui: Record<Lang, Dict> = {
     'cta.subscribeDesc': 'Un aviso ocasional cuando añadimos herramientas. Sin spam, cancela cuando quieras.',
     'cta.subscribePlaceholder': 'tu@email.com',
     'cta.subscribeButton': 'Suscribirse',
+    'cta.subscribeThanks': 'Gracias. La captura de email se activara con el servicio de newsletter.',
   },
   de: {
     'site.title': 'DIY Materialrechner',
@@ -223,6 +264,8 @@ export const ui: Record<Lang, Dict> = {
     'nav.roofing': 'Dach & Außen',
     'common.home': 'Start',
     'common.popular': 'Beliebt',
+    'common.methodology': 'Methodik',
+    'common.lastReviewed': 'Geprüft',
     'index.eyebrow': 'Mengenrechner',
     'index.lead':
       'Kostenlose, schnelle Rechner für Bodenbeläge, Farbe, Beton, Garten und Dach. Verwandle Maße in Bestellmengen und grobe Kosten, bevor du kaufst.',
@@ -256,6 +299,17 @@ export const ui: Record<Lang, Dict> = {
       'Interaktiver Rechner kommt bald. Die Anleitung unten zeigt vorerst die Planungsmethode.',
     'calc.disclaimer':
       'Diese Schätzungen dienen nur der Planung und können je nach Produkt, Verlegung, Verschnitt und Bedingungen variieren. Mengen vor dem Kauf bestätigen.',
+    'calc.answerFirst': 'Kurzantwort',
+    'calc.answerBody':
+      'Nutze das Ergebnis als Einkaufsschätzung und bestätige vor der Bestellung Deckung, Verschnitt, Liefermengen und Bedingungen vor Ort.',
+    'calc.estimateIncludes': 'Was diese Schätzung enthält',
+    'calc.includesArea': 'Gemessene Fläche oder Volumen aus den eingegebenen Maßen.',
+    'calc.includesWaste': 'Den auf der Seite gewählten Verschnitt- oder Deckungswert.',
+    'calc.includesRounding': 'Gerundete Kaufeinheiten, wenn Material in Kartons, Rollen, Bündeln, Säcken oder Stücken verkauft wird.',
+    'calc.beforeBuying': 'Vor dem Kauf bestätigen',
+    'calc.confirmCoverage': 'Die genaue Deckung auf Verpackung oder Händlerangebot.',
+    'calc.confirmBatch': 'Charge, Farbe, Qualität, Stärke oder produktspezifische Einbauanforderungen.',
+    'calc.confirmConditions': 'Liefermengen, Untergrund, Gefälle, Verdichtung oder örtliche Vorschriften.',
     'cat.lead': 'Wähle unten einen Rechner.',
     'cat.eyebrow': 'Kategorie',
     'cat.summary': 'Tools sind hier gelistet, darunter interaktive Rechner.',
@@ -280,6 +334,7 @@ export const ui: Record<Lang, Dict> = {
     'cta.subscribeDesc': 'Gelegentliche Info bei neuen Tools. Kein Spam, jederzeit abbestellbar.',
     'cta.subscribePlaceholder': 'du@email.com',
     'cta.subscribeButton': 'Abonnieren',
+    'cta.subscribeThanks': 'Danke. Die E-Mail-Erfassung wird mit dem Newsletter-Dienst aktiviert.',
   },
   zh: {
     'site.title': 'DIY 材料计算器',
@@ -291,6 +346,8 @@ export const ui: Record<Lang, Dict> = {
     'nav.roofing': '屋顶与外墙',
     'common.home': '首页',
     'common.popular': '热门',
+    'common.methodology': '计算方法',
+    'common.lastReviewed': '最近审核',
     'index.eyebrow': '工程用量工具',
     'index.lead':
       '面向地板、油漆、混凝土、园艺和屋顶工程的免费快速计算器。把测量数据转成下单用量和大致成本,买之前先算清。',
@@ -321,6 +378,16 @@ export const ui: Record<Lang, Dict> = {
     'calc.quickAnswers': '常见尺寸快速参考',
     'calc.comingSoon': '交互计算器即将上线。在此之前,下方指南介绍计算方法。',
     'calc.disclaimer': '这些估算仅供规划参考,会随产品、铺法、损耗和现场情况变化。下单前请确认用量。',
+    'calc.answerFirst': '先看结论',
+    'calc.answerBody': '把计算结果当作采购估算,下单前再确认产品覆盖率、损耗、配送起订量和现场条件。',
+    'calc.estimateIncludes': '这份估算包含',
+    'calc.includesArea': '由你输入的尺寸换算出的面积或体积。',
+    'calc.includesWaste': '页面中选择的损耗余量或覆盖率设置。',
+    'calc.includesRounding': '按箱、卷、捆、袋或件销售时的向上取整数量。',
+    'calc.beforeBuying': '购买前请确认',
+    'calc.confirmCoverage': '包装或供应商报价上的实际覆盖率。',
+    'calc.confirmBatch': '批次、颜色、等级、厚度或产品安装要求。',
+    'calc.confirmConditions': '本地配送起订量、基层/现场条件、坡度、压实或规范要求。',
     'cat.lead': '在下方选择一个计算器。',
     'cat.eyebrow': '分类',
     'cat.summary': '个工具,含交互式计算器。',
@@ -343,6 +410,7 @@ export const ui: Record<Lang, Dict> = {
     'cta.subscribeDesc': '上线新工具时偶尔通知你,无垃圾邮件,可随时退订。',
     'cta.subscribePlaceholder': 'you@email.com',
     'cta.subscribeButton': '订阅',
+    'cta.subscribeThanks': '已收到。邮件订阅会在接入 newsletter 服务后正式启用。',
   },
 };
 

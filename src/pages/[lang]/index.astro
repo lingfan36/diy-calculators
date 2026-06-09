@@ -8,7 +8,8 @@ export function getStaticPaths() {
 }
 
 const lang = Astro.params.lang as Lang;
-const mvp = CALCULATORS.filter((c) => c.priority === 'mvp');
+const liveCalculators = CALCULATORS.filter((c) => c.live);
+const mvp = liveCalculators.filter((c) => c.priority === 'mvp');
 const liveCount = CALCULATORS.filter((c) => c.live).length;
 const categoryStats = CATEGORIES.map((c) => ({
   ...c,
@@ -30,7 +31,7 @@ const description = t(lang, 'index.lead');
         <a class="button secondary" href={`/${lang}/categories/${CATEGORIES[0].slug}/`}>{t(lang, 'index.browseCta')}</a>
       </div>
       <div class="proof-row" aria-label="Site highlights">
-        <span class="proof">{CALCULATORS.length} {t(lang, 'index.calculatorsCount')}</span>
+        <span class="proof">{liveCount} {t(lang, 'index.calculatorsCount')}</span>
         <span class="proof">{liveCount} {t(lang, 'index.liveToolsCount')}</span>
         <span class="proof">{t(lang, 'index.noSignup')}</span>
       </div>

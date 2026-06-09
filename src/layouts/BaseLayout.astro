@@ -85,6 +85,9 @@ const alternates = locales.map((l) => ({
     <footer class="site">
       <div class="container">
         <p class="muted">© {t(lang, 'site.title')} · {t(lang, 'site.footer')}</p>
+        <nav class="footer-links" aria-label="Footer">
+          <a href={`/${lang}/methodology/`}>{t(lang, 'common.methodology')}</a>
+        </nav>
       </div>
     </footer>
     <script>

@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { locales, t, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+
+const content: Record<Lang, {
+  eyebrow: string;
+  title: string;
+  description: string;
+  sections: { title: string; body: string[] }[];
+}> = {
+  en: {
+    eyebrow: 'Calculation standards',
+    title: 'How our material calculators work',
+    description:
+      'Our calculators use transparent construction math, visible assumptions, and conservative rounding so you can turn measurements into practical order quantities.',
+    sections: [
+      {
+        title: 'What the calculators do',
+        body: [
+          'Each tool starts with the measurements a homeowner or contractor can verify on site: length, width, depth, thickness, coverage per package, waste percentage, and optional unit price.',
+          'The result is rounded up to the way the material is actually bought, such as boxes, gallons, bags, bundles, sheets, rolls, pallets, cubic yards, or tons.',
+        ],
+      },
+      {
+        title: 'Assumptions and waste',
+        body: [
+          'Waste allowances are intentionally visible. Straight flooring layouts often use about 10%, while diagonal tile, patterned carpet, fragile materials, stairs, curves, and many cutouts need more.',
+          'Depth-based materials such as mulch, gravel, topsoil, sand, and concrete convert inches to feet, then cubic feet, then cubic yards. Weight estimates use typical densities and should be confirmed with the supplier.',
+        ],
+      },
+      {
+        title: 'Why estimates differ from a quote',
+        body: [
+          'Real jobs include product-specific coverage, batch sizes, subfloor conditions, compaction, openings, seams, pattern repeats, over-excavation, and local building rules.',
+          'Use these calculators for planning and comparison. Before ordering, confirm package coverage, density, yield, and code requirements with the product label, supplier, or licensed professional.',
+        ],
+      },
+    ],
+  },
+  es: {
+    eyebrow: 'Estándares de cálculo',
+    title: 'Cómo funcionan nuestras calculadoras de materiales',
+    description:
+      'Usamos fórmulas transparentes, supuestos visibles y redondeo conservador para convertir medidas en cantidades prácticas de compra.',
+    sections: [
+      {
+        title: 'Qué hacen las calculadoras',
+        body: [
+          'Cada herramienta parte de medidas verificables: largo, ancho, profundidad, grosor, cobertura por paquete, margen de desperdicio y precio opcional.',
+          'El resultado se redondea a la forma real de compra: cajas, galones, bolsas, paquetes, paneles, rollos, palés, yardas cúbicas o toneladas.',
+        ],
+      },
+      {
+        title: 'Supuestos y desperdicio',
+        body: [
+          'El margen de desperdicio está visible. Los diseños rectos suelen usar cerca de 10%, mientras que diagonales, patrones, escaleras, curvas y muchos recortes necesitan más.',
+          'Los materiales por profundidad convierten pulgadas a pies, luego a pies cúbicos y yardas cúbicas. Las estimaciones de peso usan densidades típicas y deben confirmarse con el proveedor.',
+        ],
+      },
+      {
+        title: 'Por qué puede variar de un presupuesto',
+        body: [
+          'Un trabajo real depende de la cobertura del producto, lote, base, compactación, aberturas, juntas, repetición de patrón, sobreexcavación y normas locales.',
+          'Usa estas herramientas para planificar y comparar. Antes de comprar, confirma cobertura, densidad, rendimiento y normas con la etiqueta, proveedor o profesional autorizado.',
+        ],
+      },
+    ],
+  },
+  de: {
+    eyebrow: 'Rechenstandards',
+    title: 'Wie unsere Materialrechner funktionieren',
+    description:
+      'Die Rechner nutzen nachvollziehbare Bauformeln, sichtbare Annahmen und konservatives Aufrunden, um Maße in praktische Bestellmengen zu übersetzen.',
+    sections: [
+      {
+        title: 'Was die Rechner leisten',
+        body: [
+          'Jedes Tool beginnt mit prüfbaren Maßen: Länge, Breite, Tiefe, Stärke, Packungsdeckung, Verschnitt und optionalem Stückpreis.',
+          'Das Ergebnis wird auf die echte Kaufeinheit gerundet, etwa Kartons, Gallonen, Säcke, Bunde, Platten, Rollen, Paletten, Kubikyard oder Tonnen.',
+        ],
+      },
+      {
+        title: 'Annahmen und Verschnitt',
+        body: [
+          'Verschnitt wird bewusst sichtbar gemacht. Gerade Bodenlayouts nutzen oft etwa 10%, während diagonale Muster, Treppen, Kurven, empfindliche Materialien und viele Ausschnitte mehr brauchen.',
+          'Materialien nach Tiefe rechnen Zoll in Fuß, dann in Kubikfuß und Kubikyard um. Gewichte verwenden typische Dichten und sollten beim Händler bestätigt werden.',
+        ],
+      },
+      {
+        title: 'Warum Angebote abweichen können',
+        body: [
+          'Echte Projekte hängen von Produktdeckung, Charge, Untergrund, Verdichtung, Öffnungen, Nähten, Musterwiederholung, Aushub und lokalen Vorschriften ab.',
+          'Nutze die Rechner zur Planung und zum Vergleich. Vor dem Kauf solltest du Deckung, Dichte, Ergiebigkeit und Vorschriften mit Etikett, Händler oder Fachperson abgleichen.',
+        ],
+      },
+    ],
+  },
+  zh: {
+    eyebrow: '计算标准',
+    title: '这些材料计算器如何工作',
+    description:
+      '我们使用透明的施工公式、可见的假设和保守向上取整,帮助你把测量数据转换成实际采购数量。',
+    sections: [
+      {
+        title: '计算器做什么',
+        body: [
+          '每个工具从现场可核对的数据开始:长度、宽度、深度、厚度、每包覆盖面积、损耗比例和可选单价。',
+          '结果会按真实购买单位向上取整,例如箱、加仑、袋、捆、张、卷、托盘、立方码或吨。',
+        ],
+      },
+      {
+        title: '假设与损耗',
+        body: [
+          '损耗余量会明确展示。直铺地板常用约 10%,斜铺、图案、楼梯、曲线、易碎材料和大量裁切需要更多。',
+          '按深度计算的材料会把英寸转换成英尺,再算成立方英尺和立方码。重量估算使用常见密度,应向供应商确认。',
+        ],
+      },
+      {
+        title: '为什么会和报价不同',
+        body: [
+          '真实工程会受产品覆盖率、批次、基层、压实、开口、接缝、图案重复、超挖和当地规范影响。',
+          '这些工具用于规划和比较。下单前请根据产品标签、供应商或持证专业人士确认覆盖率、密度、产量和规范要求。',
+        ],
+      },
+    ],
+  },
+};
+
+const page = content[lang] ?? content.en;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: page.title,
+  description: page.description,
+  inLanguage: lang,
+};
+---
+
+<BaseLayout
+  title={`${page.title} - ${t(lang, 'site.title')}`}
+  description={page.description}
+  lang={lang}
+  path="/methodology/"
+  jsonLd={[articleSchema]}
+>
+  <p class="breadcrumb"><a href={`/${lang}/`}>{t(lang, 'common.home')}</a><span>/</span><span>{t(lang, 'common.methodology')}</span></p>
+
+  <section class="content-narrow">
+    <span class="eyebrow">{page.eyebrow}</span>
+    <h1>{page.title}</h1>
+    <p class="lead">{page.description}</p>
+  </section>
+
+  <section class="methodology-list">
+    {page.sections.map((section) => (
+      <article class="methodology-item">
+        <h2>{section.title}</h2>
+        {section.body.map((paragraph) => <p>{paragraph}</p>)}
+      </article>
+    ))}
+  </section>
+</BaseLayout>

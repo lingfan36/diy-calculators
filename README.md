@@ -24,16 +24,19 @@ npm run preview  # serve the built site
 ## Structure
 ```
 src/
-  data/calculators.ts        # SINGLE SOURCE OF TRUTH: all 50 calculators (slug/title/category/priority)
+  data/calculators.ts        # SINGLE SOURCE OF TRUTH: 50 calculators (slug/title/category/live)
+  data/guides.ts             # differentiated guide copy, FAQs, quick-answer scenarios
+  data/formulas.ts           # visible formula explanations for live English calculator pages
   lib/calc/mulch.ts          # pure calc logic (one module per calculator)
   layouts/BaseLayout.astro   # <head> SEO: title, meta, canonical, OG, JSON-LD slot
   components/
     MulchCalculator.astro    # interactive sample (server markup + client TS, imports lib/calc/mulch)
     Faq.astro                # visible FAQ + FAQPage schema
   pages/
-    index.astro              # L0 hub
-    categories/[category].astro  # L1 category hubs (5)
-    calculators/[slug].astro     # L2 calculator pages (50, programmatic)
+    [lang]/index.astro       # localized L0 hub
+    [lang]/categories/[category].astro  # localized L1 category hubs
+    [lang]/calculators/[slug].astro     # localized L2 calculator pages
+    [lang]/methodology.astro # localized calculation methodology page
 public/robots.txt            # crawlers + AI bots allowed; sitemap pointer
 astro.config.mjs             # `site` + sitemap integration
 ```
@@ -43,6 +46,13 @@ astro.config.mjs             # `site` + sitemap integration
 2. Create `src/lib/calc/<name>.ts` with a pure calc function (+ later a unit test).
 3. Create `src/components/<Name>Calculator.astro` (copy the mulch one).
 4. Wire it in `pages/calculators/[slug].astro` (the `live` branch).
+
+## Content quality rules
+- Ship real tools first: no calculator should be indexable until it has working math and useful guide content.
+- Keep pages answer-first: short conclusion, visible assumptions, formula or method, examples, FAQ, and related live tools.
+- Avoid thin programmatic SEO: every live page needs material-specific copy in `src/data/guides.ts`.
+- Protect trust: no popups during the growth phase, clear planning-only disclaimers, and visible review dates.
+- Concentrate internal links on live calculators; planned tools can be shown as previews but should not receive normal link weight.
 
 ## Deploy (Cloudflare Pages)
 
@@ -70,10 +80,12 @@ Config in this repo:
 - `public/robots.txt` → `Sitemap:` line
 
 ## Status
-- ✅ 50 SEO pages generate (5 category hubs + index + sitemap).
+- ✅ 228 static pages generate across 4 locales (`en`, `es`, `de`, `zh`).
 - ✅ 24 calculators currently render interactive tools with shared client-side math.
-- ✅ Responsive calculator-focused UI, localized hub copy, hreflang, FAQ schema and sitemap generation.
+- ✅ Differentiated guide copy, quick-answer scenarios, FAQ schema, breadcrumb schema, formula sections, and methodology pages.
+- ✅ Responsive calculator-focused UI, localized hub copy, hreflang, and sitemap generation.
+- ✅ Sitemap filters out `noindex` coming-soon calculator pages.
 - ⬜ 26 calculators still render the SEO shell + "coming soon" state.
-- ⬜ Replace short guide copy with full 1,200–1,800 word localized guides.
+- ⬜ Expand every live guide into full 1,200–1,800 word expert-reviewed content.
 - ⬜ Set real domain in `astro.config.mjs` `site` and `public/robots.txt`.
 - ⬜ Add ad slots / affiliate links once content is in.

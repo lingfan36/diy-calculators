@@ -20,6 +20,7 @@ import {
 } from '../../../data/calculators';
 import { calculatorLabels, calculatorTitle, locales, t, navLabel, type Lang } from '../../../i18n/ui';
 import { getGuide } from '../../../data/guides';
+import { getFormula } from '../../../data/formulas';
 
 export function getStaticPaths() {
   return locales.flatMap((lang) =>
@@ -30,12 +31,36 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const slug = Astro.params.slug!;
 const calc = getCalculator(slug)!;
-const related = byCategory(calc.category).filter((c) => c.slug !== calc.slug).slice(0, 6);
+const related = byCategory(calc.category)
+  .filter((c) => c.live && c.slug !== calc.slug)
+  .slice(0, 6);
 const localizedTitle = calculatorTitle(lang, calc.slug, calc.title);
-const description = calc.metaDescription ?? `${localizedTitle}: ${t(lang, 'calc.metaBody')}`;
-const noun = localizedTitle.replace(' Calculator', '');
 const labels = calculatorLabels(lang);
 const guide = getGuide(lang, calc.slug);
+const formula = lang === 'en' ? getFormula(calc.slug) : undefined;
+const REVIEW_DATE = '2026-06-09';
+const dateLocales: Record<Lang, string> = {
+  en: 'en-US',
+  es: 'es-ES',
+  de: 'de-DE',
+  zh: 'zh-CN',
+};
+const reviewDateDisplay = new Intl.DateTimeFormat(dateLocales[lang], {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(new Date(`${REVIEW_DATE}T00:00:00Z`));
+function metaSnippet(text: string): string {
+  const clean = text.replace(/\s+/g, ' ').trim();
+  const firstSentence = clean.match(/^.+?[.!?。]/)?.[0] ?? clean;
+  if (firstSentence.length <= 155) return firstSentence;
+  return `${firstSentence.slice(0, 152).replace(/\s+\S*$/, '')}...`;
+}
+const metaFromGuide = guide?.intro
+  ? `${localizedTitle}: ${metaSnippet(guide.intro)}`
+  : undefined;
+const description = calc.metaDescription ?? metaFromGuide ?? `${localizedTitle}: ${t(lang, 'calc.metaBody')}`;
+const noun = localizedTitle.replace(' Calculator', '');
 
 const webApp = {
   '@context': 'https://schema.org',
@@ -45,6 +70,14 @@ const webApp = {
   operatingSystem: 'Any',
   inLanguage: lang,
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  dateModified: REVIEW_DATE,
+  isAccessibleForFree: true,
+  featureList: [
+    'interactive material quantity calculator',
+    'waste allowance',
+    'optional cost estimate',
+    'visible calculation guidance',
+  ],
 };
 const breadcrumb = {
   '@context': 'https://schema.org',
@@ -79,7 +112,40 @@ const faqItems = [
     <span class="eyebrow">{navLabel(lang, calc.category)}</span>
     <h1>{localizedTitle}</h1>
     <p class="lead">{t(lang, 'calc.lead')}</p>
+    {calc.live && (
+      <p class="review-note">
+        {t(lang, 'common.lastReviewed')}: <time datetime={REVIEW_DATE}>{reviewDateDisplay}</time>
+      </p>
+    )}
   </section>
+
+  {calc.live && (
+    <section class="answer-panel" aria-labelledby="answer-first-heading">
+      <div>
+        <span class="eyebrow">{t(lang, 'calc.answerFirst')}</span>
+        <h2 id="answer-first-heading">{localizedTitle}</h2>
+        <p>{t(lang, 'calc.answerBody')}</p>
+      </div>
+      <div class="quality-grid" aria-label={t(lang, 'calc.estimateIncludes')}>
+        <div class="quality-item">
+          <h3>{t(lang, 'calc.estimateIncludes')}</h3>
+          <ul>
+            <li>{t(lang, 'calc.includesArea')}</li>
+            <li>{t(lang, 'calc.includesWaste')}</li>
+            <li>{t(lang, 'calc.includesRounding')}</li>
+          </ul>
+        </div>
+        <div class="quality-item">
+          <h3>{t(lang, 'calc.beforeBuying')}</h3>
+          <ul>
+            <li>{t(lang, 'calc.confirmCoverage')}</li>
+            <li>{t(lang, 'calc.confirmBatch')}</li>
+            <li>{t(lang, 'calc.confirmConditions')}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  )}
 
   {calc.slug === 'mulch-calculator' ? (
     <MulchCalculator lang={lang} />
@@ -136,6 +202,17 @@ const faqItems = [
       <p>{t(lang, 'calc.guideIntro')}</p>
     )}
   </div>
+
+  {formula && (
+    <section class="formula-panel" aria-labelledby="formula-heading">
+      <span class="eyebrow">Formula</span>
+      <h2 id="formula-heading">{formula.label}</h2>
+      <code>{formula.expression}</code>
+      <ul>
+        {formula.notes.map((note) => <li>{note}</li>)}
+      </ul>
+    </section>
+  )}
 
   <h2>{t(lang, 'calc.order')}</h2>
   {guide && guide.factors.length > 0 ? (

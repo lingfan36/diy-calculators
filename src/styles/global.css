@@ -668,11 +668,26 @@ p {
   transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-.card:hover {
+a.card:hover {
   border-color: rgba(23, 98, 75, 0.45);
   background: #fff;
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.card-muted {
+  background: rgba(255, 255, 255, 0.48);
+  color: var(--ink-soft);
+  box-shadow: none;
+}
+
+.card-muted .name,
+.card-muted .desc {
+  color: var(--ink-soft);
+}
+
+.card-muted::after {
+  content: '';
 }
 
 .card .name {
@@ -717,6 +732,58 @@ p {
   vertical-align: middle;
 }
 
+.review-note {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  margin-top: 0.75rem;
+}
+
+.answer-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(340px, 1.15fr);
+  gap: 1rem;
+  border: 1px solid rgba(23, 98, 75, 0.2);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(242, 247, 243, 0.92), rgba(255, 255, 255, 0.86));
+  padding: 1rem;
+  margin: 1rem 0 1.1rem;
+}
+
+.answer-panel h2,
+.answer-panel h3 {
+  margin-top: 0.2rem;
+}
+
+.answer-panel p {
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.quality-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.quality-item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0.85rem;
+}
+
+.quality-item h3 {
+  font-size: 1rem;
+}
+
+.quality-item ul {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -735,6 +802,58 @@ p {
   background: rgba(255, 255, 255, 0.72);
   padding: 1rem 1.1rem;
   margin: 1rem 0;
+}
+
+.formula-panel {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-blue);
+  padding: 1rem 1.1rem;
+  margin: 1rem 0 1.3rem;
+}
+
+.formula-panel h2 {
+  margin: 0.15rem 0 0.65rem;
+}
+
+.formula-panel code {
+  display: block;
+  overflow-x: auto;
+  border: 1px solid rgba(49, 93, 114, 0.18);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: var(--forest-700);
+  font-family: var(--font-mono);
+  font-size: 0.94rem;
+  line-height: 1.55;
+  padding: 0.78rem 0.85rem;
+  white-space: nowrap;
+}
+
+.formula-panel ul,
+.methodology-item {
+  margin: 0.75rem 0 0;
+}
+
+.formula-panel ul {
+  padding-left: 1.15rem;
+  color: var(--ink-soft);
+}
+
+.methodology-list {
+  display: grid;
+  gap: 1rem;
+  max-width: var(--contentw);
+  margin-top: 1.4rem;
+}
+
+.methodology-item {
+  border-top: 1px solid var(--line);
+  padding-top: 0.7rem;
+}
+
+.methodology-item h2 {
+  margin-top: 0.4rem;
 }
 
 .notice {
@@ -895,6 +1014,24 @@ footer.site .muted {
   font-size: 0.88rem;
 }
 
+.footer-links {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+}
+
+.footer-links a {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--forest-700);
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -934,6 +1071,11 @@ footer.site .muted {
   .hero {
     grid-template-columns: 1fr;
     padding-top: 2rem;
+  }
+
+  .answer-panel,
+  .quality-grid {
+    grid-template-columns: 1fr;
   }
 
   .section-head {
